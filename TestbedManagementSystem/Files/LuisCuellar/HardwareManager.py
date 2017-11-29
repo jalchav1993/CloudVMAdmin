@@ -5,18 +5,20 @@ from VirtualMachine import VirtualMachine
 class HardwareManager:
     def __init__(self):
         print("Hardware Manager Created")
-        self.__vmList = set()
-        self.__serverList = set()
-        
-    def addVM(self, vmname, vrdp, host):
-        newVM = VirtualMachine(vmname, vrdp, host)
-        self.__vmList.add(newVM)
+        self.__vmSet = set()
+        self.__serverSet = set()
         
     def __getVM(self, vmname):
-        for vm in self.__vmList: 
+        for vm in self.__vmSet: 
             if vmname == vm.getName(): 
                 return vm
             return None 
+        
+    def __getServer(self, serverIP):
+        for server in self.__serverSet:
+            if serverIP == server.getIP():
+                return server
+            return None
     
     def getVRDP(self, vmname):
         vm = self.__getVM(vmname)
@@ -38,15 +40,26 @@ class HardwareManager:
         vm = self.__getVM(vmname)
         return (vm.getMemoryUsage())
     
+    def getServerStatus(self, serverIP):
+        server = self.__getServer(serverIP)
+        return server.getIP()
+    
     # Not in SDD
     
     # Configurations is a dictionary with keys: vmname, vrdp, networkAdapter, host
-    def createVirtualMachine(self, configurations):
-        newVM = VirtualMachine(configurations['vmname'], configurations['vrdp'], configurations['networkAdapter'], configurations['host'])
-        if(newVM in self.__vmList):
+    def addVirtualMachine(self, configurations):
+        newVM = VirtualMachine(configurations)
+        if(newVM in self.__vmSet):
             return False
         else:
             self.__vmList.add(newVM)
             return True
         
-    
+    # Configurations is a dictionary with keys: ipAddress, username, password
+    def addServer(self, configurations):
+        newServer = Server(configurations)
+        if(newServer in self.__serverSet):
+            return False
+        else:
+            self.__serverSet.add(newServer)
+            return True

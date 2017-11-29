@@ -1,19 +1,21 @@
 class VirtualMachine:
-    def __init__(self, name, vrdp, networkAdapter, host):
+    def __init__(self, configurations):
         print("Virtual Machine created")
-        self.__name = name
-        self.__vrdp = vrdp
-        self.__networkAdapter = networkAdapter
-        self.__host = host
+        self.__vmname = configurations['vmname']
+        self.__vrdp = configurations['vrdp']
+        self.__networkAdapter = configurations['networkAdapter']
+        self.__host = configurations['host']
+        
+        self.__createVMRecord()
         
     def __eq__(self, other):
-        return self.__name == other.getName()
+        return self.__vmname == other.getVMName()
     
     def __hash__(self):
-        return hash(self.__name)
+        return hash(self.__vmname)
     
-    def getName(self):
-        return self.__name
+    def getVMName(self):
+        return self.__vmname
     
     def getVRDP(self):
         return self.__vrdp
@@ -24,11 +26,14 @@ class VirtualMachine:
     def getHost(self):
         return self.__host
     
-    def storeVM(self):
-        DBM mgr = DBM()
-        mgr.addRecord( mgr.getVMID(), self.__toDict() )
+    def getSnapshot(self):
+        return "something"
+    
+    def __createVMRecord(self):
+        dbMgr = DatabaseManager.Instance()
+        dbMgr.addRecord( dbMgr.getVMID(), self.__toDict() )
         
     def __toDict(self):
-        dict = {'vmname': self__name, 'vrdp': self__vrdp, 'host': self__host}
+        dict = {'vmname': self.__vmname, 'vrdp': self.__vrdp, 'networkAdapter': self.__networkAdapter, 'snapshot': self.__getSnapshot(), 'host': self.__host}
         return dict
         
