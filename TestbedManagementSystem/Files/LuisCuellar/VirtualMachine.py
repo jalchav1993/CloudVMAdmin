@@ -1,8 +1,9 @@
 class VirtualMachine:
-    def __init__(self, name, vrdp, host):
+    def __init__(self, name, vrdp, networkAdapter, host):
         print("Virtual Machine created")
         self.__name = name
         self.__vrdp = vrdp
+        self.__networkAdapter = networkAdapter
         self.__host = host
         
     def __eq__(self, other):
@@ -16,6 +17,9 @@ class VirtualMachine:
     
     def getVRDP(self):
         return self.__vrdp
+    
+    def getNetworkAdapter(self):
+        return self.__networkAdapter
     
     def getHost(self):
         return self.__host
