@@ -1,4 +1,4 @@
-class Server():
+class Server:
     def __init__(self):
-        print("some weird shit")
+        print("Server Created")
         
