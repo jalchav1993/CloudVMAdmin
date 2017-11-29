@@ -19,4 +19,12 @@ class VirtualMachine:
     
     def getHost(self):
         return self.__host
+    
+    def storeVM(self):
+        DBM mgr = DBM()
+        mgr.addRecord( mgr.getVMID(), self.__toDict() )
+        
+    def __toDict(self):
+        dict = {'vmname': self__name, 'vrdp': self__vrdp, 'host': self__host}
+        return dict
         
