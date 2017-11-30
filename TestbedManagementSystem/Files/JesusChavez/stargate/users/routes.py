@@ -1,7 +1,20 @@
+@users.route("/users/")
+def logout():
+    return UserInteractionManager.getUser();
 from . import users
 @users.route("/users/login")
 def login():
-    return "Hello World!"
-@users.route("/users/get")
-def login():
-    return "Hello World!"
+    return UserInteractionManager.logIn();
+@users.route("/users/logout")
+def logout():
+    return UserInteractionManager.logOut();
+@users.route("/users/create")
+def create():
+    return UserInteractionManager.createUser();
+@users.route("/users/update")
+def update():
+    return UserInteractionManager.updateUser();
+@users.route("/users/delete")
+def delete():
+    return UserInteractionManager.deleteUser();
+
