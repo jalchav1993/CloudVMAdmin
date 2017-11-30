@@ -23,3 +23,11 @@ class WorkshopUnit:
         dict = {'unitName' : self.__unitName, 'vms' : self.__vms, 'connectionString' : self.__connectionString}
         return dict
     
+    def startAllVms(self):
+        for vmname in vms:
+            self.startVM(vmname)
+            
+    def startVM(self, vmname):
+        hwMgr = HardwareManager.instance()
+        if vmname in vms:
+            hwMgr.startVM(vmname)
