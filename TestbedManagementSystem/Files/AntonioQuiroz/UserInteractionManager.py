@@ -21,7 +21,7 @@ class UserInteractionManager:
             return None
        
     def getWorkShop(self, wsName):
-        ws = self.__getWorkshop(wsName)
+        ws = WorkshopManager.Instace()
         return (ws.getWorkshop())
     
     def getMaterial(self, wsName):
