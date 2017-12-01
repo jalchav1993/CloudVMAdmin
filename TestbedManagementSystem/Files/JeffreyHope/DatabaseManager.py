@@ -9,31 +9,52 @@ from WorkshopUnitDB import WorkshopUnitDB
 class DatabaseManager:
     def __init__(self):
         print("Database Manager Created")
-		self.__adminDB = configurations['adminDB']
-		self.__regUserDB = configurations['regUserDB']
-		self.__serverDB = configurations['serverDB']
-		self.__virtualMachineDB = configurations['virtualMachineDB']
-		self.__workshopDB = configurations['workshopDB']
-		self.__workshopGroupDB = configurations['workshopGroupDB']
-		self.__workshopUnitDB = configurations['workshopUnitDB']
+		self.__adminDB = set()
+		self.__regUserDB = set()
+		self.__serverDB = set()
+		self.__virtualMachineDB = set()
+		self.__workshopDB = set()
+		self.__workshopGroupDB = set()
+		self.__workshopUnitDB = set()
 
-    def __getAdminDB(self)
-        return self.__adminDB
+    def __getAdminDB(self, adminDBName)
+		for adminDB in self.__adminDBSet
+			if adminDBName == adminDB.getName()
+				return adminDB
+			return None
 
-    def __getRegUserDB(self)
-        return self.__regUserDB
+    def __getRegUserDB(self, regUserDBName)
+		for regUserDB in self.__regUserDBSet
+			if regUserDBName == regUserDB.getName()
+				return regUserDB
+			return None
 
-    def __getServerDB(self)
-        return self.__serverDB
+    def __getServerDB(self, serverDBName)
+		for serverDB in self.__serverDBSet
+			if serverDBName == serverDB.getName()
+				return serverDB
+			return None
 
-    def __getVirtualMachineDB(self)
-        return self.__virtualMachineDB
+    def __getVirtualMachineDB(self, virtualMachineDBName)
+		for getVirtualMachineDB in self.__virtualMachineDBSet
+			if virtualMachineDBName == virtualMachineDB.getName()
+				return virtualMachineDB
+			return None
 
-    def __getWorkshopDB(self)
-        return self.__workshopDB
+    def __getWorkshopDB(self, workshopDBName)
+		for workshopDB in self.__workshopDBSet
+			if workshopDBName == workshopDB.getName()
+				return workshopDB
+			return None
 
-    def __getWorkshopGroupDB(self)
-        return self.__workshopGroupDB
+    def __getWorkshopGroupDB(self, workshopGroupDB)
+		for workshopGroupDB in self.__workshopGroupDBSet
+			if workshopGroupDBName == workshopGroupDB.getName()
+				return workshopGroupDB
+			return None
 
-    def __getWorkshopUnitDB(self)
-        return self.__workshopUnitDB
+    def __getWorkshopUnitDB(self, workshopUnitDB)
+		for workshopUnitDB in self.__workshopUnitDBSet
+			if workshopUnitDBName == workshopUnitDB.getName()
+				return workshopUnitDB
+			return None
