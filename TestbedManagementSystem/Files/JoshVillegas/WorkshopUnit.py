@@ -23,6 +23,12 @@ class WorkshopUnit:
         dict = {'unitName' : self.__unitName, 'vms' : self.__vms, 'connectionString' : self.__connectionString}
         return dict
     
+    #question to ak for the follow action methods:
+    #should they be called in the manager in order to allow all communication to happen through the managers?
+    #example for how it would look in the manager class:
+    # def startVm(workshopName, unitName, vmName):
+    #maybe only for the start all, pause all, etc... methods??
+    
     def startAllVms(self):
         for vmname in vms:
             self.startVM(vmname)
@@ -31,3 +37,20 @@ class WorkshopUnit:
         hwMgr = HardwareManager.instance()
         if vmname in vms:
             hwMgr.startVM(vmname)
+            
+    # the followig methods exist but still need to be implemented
+    
+    def pauseVm(self, vmname):
+    
+    def pauseAllVms(self):
+        
+    def suspendVm(self, vmname):
+    
+    def suspendAllVms(self):
+    
+    def removeVm(self, vmname):
+        
+    def removeAllVms(self):
+    
+     
+    

@@ -41,3 +41,28 @@ class WorkshopManager:
         unit = self.__getUnit(unitName)
         return (unit.getConnectionString())
     
+    def addWorkshopUnit(self, configurations):
+        newUnit = workshopUnit(configurations)
+        if(newUnit in self.__unitSet):  #unit already exists
+            return False
+        else:
+            self.__unitSet.add(newUnit)
+            return True
+        
+    def addWorkshopGroup(self, configurations):
+        newGroup = WorkshopGroup(configurations)
+        if(newGroup in self.__groupSet):
+            return False
+        else:
+            self.__groupSet.add(newGroup)
+            return True
+        
+    def addWorkshop(self, configurations):
+        newWorkshop = Workshop(configurations)
+        if(newWorkshop in self.__workshopSet):
+            return False
+        else:
+            self.__workshopSet.add(newWorkshop)
+            return True
+        
+    

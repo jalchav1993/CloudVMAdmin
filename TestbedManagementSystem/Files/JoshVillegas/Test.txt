@@ -1,1 +1,47 @@
 Test
+
+Changes to be made:
+	1. need to add add methods to add workshops, units, and groups to their respective sets
+	2. define every instance of configurations. (what it contains)
+	3. need to add the equal method to ensure that the set comparisons work
+	4. hash function needs to be added as well
+	5. there should only be a workhop set that holds both the associated groups and units
+	6. start vm methods need to be added to the workshop unit class
+	7. methods for stopping, pausing all instances (units, vms,)
+	8. units and groups wanna be subclasses (need to google how to do inheritance in python)
+	9. add crud for group and unit (create, update, delete, remove)
+	10. 
+	
+
+	
+Test Cases:
+	1. addWorkshopUnit - decision table test:
+		@requires configurations has fields "unitname", "vms", "connectionString"
+		@ensures /result == true if workshopUnit is not in unitList || /result == false if workshopUnit is in unitList
+		
+		addWorkshopUnit(self, configurations){...}
+		
+		cases:
+			1. unitName
+			2. vm list
+			3. connection string
+			4. In unitList
+			
+		actions:
+			1. true
+			2. false
+			
+		decision table:
+			~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+			c1    | T | T | F | - | - | - |
+			~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+			c2    | T | T | - | F | - | - |
+			~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+			c3    | T | T | - | - | F | - |
+			~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+			c4    | T | F | - | - | - | F |
+			~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+			true  |   | X |   |   |   |   |
+			~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+			false | X |   | X | X | X | X |
+			~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
