@@ -1,8 +1,9 @@
-[	 
-	{"template": "Virtual Machines", "action":"Virtual Machines","route":"myprofileRt"},
-	{"template": "Workshop Groupst", "action":"Workshop Groups","route":"myeventsRt"},
-	{"template": "Workshop Units", "action":"Workshop Units","route":"usersRt"},
-	{"template": "Statistics", "action":"Statistics","route":"usersRt"},
-	{"template": "User Profiles", "action":"User Profiles","route":"reportsRt"},
-	{"template": "Sign Out", "action":"signout","route":"eventsRt"}
+[	
+	{"template": "Servers", "action":"server","route":"serversRt"},
+	{"template": "Virtual Machines", "action":"vm","route":"vmRt"},
+	{"template": "Workshop Groups", "action":"wg","route":"wsgRt"},
+	{"template": "Workshop Units", "action":"wu","route":"wsuRt"},
+	{"template": "Statistics", "action":"stat","route":"statsRt"},
+	{"template": "User Profiles", "action":"profile","route":"usprRt"},
+	{"template": "Sign Out", "action":"signout","route":"serversRt"}
 ]

@@ -40,30 +40,19 @@
 	  <![endif]-->
 </head>
 <body class = 'ng-scope' ng-app = "EventDesk">
-	<div ng-controller = "NavCtrl">
+	<div ng-controller = "navCtrl">
 	  <section layout="row" flex>
 	    <md-sidenav class="md-sidenav-left" md-component-id="left" md-whiteframe="4">
 	      <md-toolbar>
 	        <h1 class="md-toolbar-tools UTEP-theme-color-blue">Workshop</h1>
 							<img src="./images/utep.png">
 	      </md-toolbar>
-				<div style = "margin-bottom:0px">
-					<uib-accordion>
-					    <div uib-accordion-group heading="{{header.msg}}" >
-									<div ng-repeat = "accordionItem in header.accordionItems">
-										<a ng-href ="./#/{{accordionItem.route}}" ng-click ="getAction(accordionItem.action)">
-											{{accordionItem.template}} 
-										</a>
-									</div>
-							</div>
-						</uib-accordion>
-					</div>
-	      	<md-content>
-		      	<md-list flex>
-		        	<md-list-item class="md-1-line" ng-href = "./#/{{item.route}}" ng-repeat = "item in menuItems" ng-click = "getAction(item.action)">
-		         	 <div class="md-list-item-text" layout="column">
-		           	<h6>{{item.template}}</h6>
-		          	</div>
+	      <md-content>
+		      <md-list flex>
+		        <md-list-item class="md-1-line" ng-href = "./#/{{item.route}}" ng-repeat = "item in menuItems" ng-click = "getAction(item.action)">
+		        	<div class="md-list-item-text" layout="column">
+		          	<h6>{{item.template}}</h6>
+		          </div>
 		        </md-list-item>
 		      </md-list>
 	      </md-content>
@@ -78,33 +67,36 @@
 		 	      <md-button class="md-icon-button" ng-click="getAndToggleMenu()">
 		 		      <i class=" material-icons"><span class = "white-text">reorder</span></i>
 		 	      </md-button>
+					  <!-- This fills the remaining space of the current row -->
 		 	      <span flex></span>
-		 	    </div>
-		 	  </md-toolbar>
+						<p>{{header.msg}}</p>
+						<!-- this is for accordion-->
+						<md-menu>
+							<md-button aria-label="Open phone interactions menu" class="md-icon-button" 	ng-click="openMenu($mdOpenMenu, $event)">
+						  	<i class=" material-icons"><span class = "white-text">arrow_drop_down</span></i>
+						  </md-button>
+						  <md-menu-content width="4">
+						  	<md-menu-item ng-repeat = "accordionItem in header.accordionItems">
+									<md-button ng-href = "./#/{{accordionItem.route}}" ng-click="getAction(accordionItem.action)">
+						        	{{accordionItem.template}}
+						      </md-button>
+						    </md-menu-item>
+							</md-menu-content>
+						</md-menu>
+		 	  	</md-toolbar>
 	      </div>
+				<div ng-controller="loginModalCtrl as $ctrl" class="modal-demo">
+					<div class="modal-parent"></div>
+				</div>
+				<div ng-controller="AddServerModalCtrl as $ctrl" class="modal-user">
+					<div class="modal-parent"></div>
+				</div>
 	    </md-content>
 	  </section>
 	</div>
-	<div class = "container" ng-controller = "eventsController" >
+	<div class = "container" ng-controller = "serversController" >
 		<div class = "ng-view"></div>
 	</div>
-	<script type="text/ng-template" id="group-template.html">
-	  <div class="panel panel-default">
-	    <div class="panel-heading">
-	      <h4 class="panel-title" style="color:#fa39c3">
-	        <a href tabindex="0" class="accordion-toggle" ng-click="toggleOpen()" uib-accordion-transclude="heading">
-	          <span uib-accordion-header ng-class="{'text-muted': isDisabled}">
-	            {{heading.msg}}
-	          </span>
-	        </a>
-	      </h4>
-	    </div>
-	    <div class="panel-collapse collapse" uib-collapse="!isOpen">
-	      <div class="panel-body" style="text-align: right" ng-transclude></div>
-	    </div>
-	  </div>
-	</script>
-	
 </body>
 </html>
 
