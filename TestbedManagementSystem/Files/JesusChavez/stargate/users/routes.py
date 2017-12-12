@@ -1,7 +1,7 @@
-from . import users
 @users.route("/users/")
-def get():
+def logout():
     return UserInteractionManager.getUser();
+from . import users
 @users.route("/users/login")
 def login():
     return UserInteractionManager.logIn();
