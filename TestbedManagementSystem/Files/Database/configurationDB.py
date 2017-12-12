@@ -1,17 +1,17 @@
 import pymysql
-import numpy
 class configurationDB:
 
     def __init__(self):
-        self.__connect = self.connect()
-        self.__connection
+        self.__connect = set()
+        self.__connection = set()
      
     def isset(self):
         return self in locals()
             
         
     def connect(self):
-        if not self.isset(self.connection):
+        newConn = configurationDB()
+        if newConn in self.__connection:
             self.__connection = pymysql.connect(host="earth.cs.utep.edu", user = "aquiroz10", passwd="cs4311", db="aquiroz10")                 
             
         if self.__connection is False:
@@ -30,9 +30,9 @@ class configurationDB:
         return self.__connect.Error
     
                
-    def select(self):
+    def select(self,query):
         db = self.__connect
-        result = db.query(self)
+        result = db.query(query)
         if result is False:
             print ("UNABLE TO SELECT",self.getError())
         rows = []
@@ -57,8 +57,8 @@ class configurationDB:
             print("Unable to prepare statement: ", self.getError())
         return stmt
     
-    def execute(self):
-        stmt = self.execute()
-        result = stmt._do_get_result()
-        stmt.close()
-        return result
+#     def execute(self):
+#         stmt = self.execute()
+#         result = stmt._do_get_result()
+#         stmt.close()
+#         return result
