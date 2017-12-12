@@ -1,0 +1,3 @@
+[	
+	{"msg":"welcome, ", "accordionItems":[{"template": "Sign In", "action":"signin","route":"serversRt"}]}
+]
