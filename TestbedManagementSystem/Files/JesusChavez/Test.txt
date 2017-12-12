@@ -31,5 +31,6 @@ Test Cases
 		{<name = null>, {response: "invalid call"}}
 		{<name  = {"request":"valid vrdp"}>, {response: "vrdp"}}
 		{<name  = {"request":"invalid vrdp"}>, {response: "invalid call"}}
+		{<name  = some string>, {response: "invalid call"}}
 		
 		
