@@ -1,68 +1,87 @@
 from TestbedManagementSystem.Files.Database.configurationDB import configurationDB
 configurationDB
 
-import pymysql
 class UserDatabase:
     
     def __init__(self,configuration):
-        self.__uemail = configuration['Uemail']
-        self.__ufname = configuration['Ufname']
-        self.__ulname = configuration['Ulname']
-        self.__upassword = configuration['Upassword']
+        self.__email = configuration['Uemail']
+        self.__fname = configuration['Ufname']
+        self.__lname = configuration['Ulname']
+        self.__password = configuration['Upassword']
         
         
-    def insertUser(self,db,configuration):
-        configuration['Uemail'] = db.escape(configuration['Uemail'])
-        configuration['Upassword'] = db.escape(configuration['Upassword'])
-        
-        return db.insert("INSERT INTO USERS (Uemail, Ufname, Ulname, Upassword) VALUES ('"
-                         , configuration["Uemail"] , "','" , configuration["Ufname"] , "','" 
-                         , configuration["Ulname"] ,"','" , configuration["Upassword"] , "')")
-        
-     #the only one that works   
+    def insertUser(self,configuration):
+        conn = configurationDB.connect(self)
+        cur = conn.cursor()  
+        insert = "INSERT INTO USER (Uemail, Ufname, Ulname, Upassword) VALUES ('" + configuration["Uemail"] + "','" + configuration["Ufname"] + "','" + configuration["Ulname"] +"','" + configuration["Upassword"] + "')"
+        cur.execute(insert)
+        print(self.__email,self.__fname,self.__lname,self.__password)
+        print('Add a New User\n')
+        cur.close()
+        conn.close()
+       
     def selectUser(self,configuration):
-        conn = pymysql.connect(host="earth.cs.utep.edu", user = "aquiroz10", passwd="cs4311", db="aquiroz10")
-        db = conn.cursor()         
-
-        db.execute("SELECT * FROM USER WHERE Uemail = 'test@test.com'")     
+        conn = configurationDB.connect(self)
+        cur = conn.cursor()       
+        select = "SELECT * FROM USER WHERE Uemail = '"+configuration['Uemail']+"'"
+        cur.execute(select)     
         
-        for row in db:
-            print (row)  
+        for row in cur:
+            print()
+#             print (row)  
         print(row[0])
-        db.close()
+        print('User elected\n')
+        cur.close()
+        conn.close()
         
     
     def updateUser(self,configuration):
-        db = configurationDB(configuration)
-        e = db.getError
-        if e is True:
-            print ("Unable to fetch parts: ",e)
+        conn = configurationDB.connect(self)
+        cur = conn.cursor()
         
-        db.update("UPDATE USER SET Uemail = '",configuration['Uemail'],
-                  "Ufname = '",configuration['Ufname'],
-                  "Ulname = '",configuration['Ulanme'],
-                  ", WHERE Uemail = '",configuration['Uemail'],"'")
+        update = "UPDATE USER SET Uemail = '"+configuration['Uemail']+"', Ufname = '"
+        +configuration['Ufname']+ "', Ulname = '"+configuration['Ulname']
+        +"' WHERE Uemail = '"+configuration['Uemail']+"'"
+        cur.execute(update)
+        select = "SELECT * FROM USER WHERE Uemail = '"+configuration['Uemail']+"'"
+        cur.execute(select)  
+
+        for row in cur: 
+            print(row)
+        print('User Updated\n')
+        cur.close()
+        conn.close()
     
-    def resetPassword(self,configuration):
-        db = configurationDB(configuration)
-        e = db.getError
-        if e is True:
-            print ("Unable to fetch parts: ",e)
-            
-        db.update("UPDATE USER SET Upassword = '",configuration['Uemail'],
-                  ", WHERE Uemail = '",configuration['Uemail'],"'") 
+    def resetPassword(self,email,password):
+        conn = configurationDB.connect(self)
+        cur = conn.cursor()
+#             
+        update = "UPDATE USER SET Upassword = '"+password+"' WHERE Uemail = '"+email+"'"
+        cur.execute(update)     
+         
+        cur.close()
+        conn.close()
+        return self.__password
         
     def removeUser(self,configuration):
-        db = configurationDB(configuration)
-        e = db.getError
-        if e is True:
-            print ("Unable to fetch parts: ",e)
-            
-        db.delete("DELETE FROM USER WHERE Uemail = '",configuration['Uemail'],"'") 
-        
+        conn = configurationDB.connect(self)
+        cur = conn.cursor()    
+        cur.execute("DELETE FROM USER WHERE Uemail = '"+configuration['Uemail']+"'") 
+        print('User deleted\n')
     
-    
+    def printAllUsers(self):
+        conn = configurationDB.connect(self)
+        cur = conn.cursor()  
+        select = "SELECT * FROM USER "
+        cur.execute(select) 
+        conn.commit()
+        results = cur.fetchall()
+        for row in results:
+            for i in range(0,len(row)):
+                print("%s" % row[i])
+        print("List all users\n") 
+
     def __toDict(self):
-        dict = {'Uemail': self.__uemail,'Ufname': self.__ufname, 
-                'Ulname': self.__ulname,'Upassword':self.__upassword}
+        dict = {'Uemail': self.__email,'Ufname': self.__fname, 
+                'Ulname': self.__lname,'Upassword':self.__password}
         return dict

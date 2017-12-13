@@ -10,13 +10,7 @@ class configurationDB:
             
         
     def connect(self):
-        newConn = configurationDB()
-        if newConn in self.__connection:
-            self.__connection = pymysql.connect(host="earth.cs.utep.edu", user = "aquiroz10", passwd="cs4311", db="aquiroz10")                 
-            
-        if self.__connection is False:
-            print("UNABLE TO CONNECT TO DATABASE")
-            
+        self.__connection = pymysql.connect(host="earth.cs.utep.edu", user = "aquiroz10", passwd="cs4311", db="aquiroz10")
         return self.__connection
     
     def close(self):
