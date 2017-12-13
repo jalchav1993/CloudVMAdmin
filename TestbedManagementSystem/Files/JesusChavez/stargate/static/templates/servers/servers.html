@@ -1,0 +1,81 @@
+<style>
+.diabled-class{
+	background-color:green;
+	color:white;
+}
+</style>
+
+<div layout="column">
+		<div layout="row" style = "max-height:53px;">
+  		<div flex="33" style = "height:100%; and overflow:auto;">
+				<md-button>
+					+ server
+				</md-button>
+				<md-button>
+					delete
+				</md-button></div>
+  		<div flex="50"style = "height:100%; and overflow:auto;"></div>
+  		<div flex="17"style = "height:100%; and overflow:auto;">
+				<md-input-container>
+					<label>Search</label>
+					<input ng-model="search">
+				</md-input-container>
+			</div>
+		</div>
+	<div layout="row" layout-wrap>
+		<md-toolbar class="md-warn" >
+		  <div class="md-toolbar-tools" layout="row" layout-align="center center">
+		    <h2 class="md-flex">Servers</h2>
+		  </div>
+		</md-toolbar>
+		
+		<md-content flex layout-padding>
+			<uib-accordion close-others="oneAtATime">
+				<div uib-accordion-group class="panel-default" >
+					<uib-accordion-heading ng-click = "">
+						<span>176.134.567.332</span>
+						<i class="pull-right">Online </i>
+						
+					</uib-accordion-heading>
+					<secion layout = "row">
+						<table class="table" flex>
+							<thead>
+								<tr>
+									<th>Description</th>
+									<th>Value</th>
+							  </tr>
+					    </thead>
+					    <tbody>
+					      <tr>
+									<th>Workshop Groups</th>
+									<td>
+										Workshop Group A
+									</td>
+								</tr>
+					      <tr>
+									<th>Workshop Units</th>
+									<td>
+										Workshop Unit c
+									</td>
+								</tr>
+								<tr>
+									<th>Select</th>
+									<td>
+										<span style = "display:inline-block">
+											<md-checkbox class = "md-warn" ng-model="true">
+											</md-checkbox>
+										</span>
+									</td>
+					      </tr>
+					    </tbody>
+					  </table>
+					</section>
+			  </div>
+			</uib-accordion>
+		</md-content>
+	</div>
+</div>
+
+
+
+

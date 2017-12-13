@@ -88,17 +88,33 @@
 				console.log(response);
 			});
 		}
-		obj.getAndToggleMenu = function() {
-			obj.menuItemList = [];
+		obj.initRequest = function(){
 			obj.header = [];
 			$http({
-				url: "http://" + location.host + "/api/menu/",
+				url: "http://" + location.host + "/api/init",
 				method: "GET"
 			}).success(function(data, status, headers, config) {
 				tmp = new HeaderItem();
 				angular.copy(data[0], tmp);
 				obj.header = tmp;
-				for (i = 1; i < data.length; i++) {
+				$rootScope.$broadcast("populate-init");
+				console.log("init")
+			}).error(function(data, status, headers, config) {
+				console.log('Error');
+				console.log(response);
+			});
+		}
+		obj.getAndToggleMenu = function() {
+			obj.menuItemList = [];
+			//obj.header = [];
+			$http({
+				url: "http://" + location.host + "/api/menu/sidenav",
+				method: "GET"
+			}).success(function(data, status, headers, config) {
+				//tmp = new HeaderItem();
+				//angular.copy(data[0], tmp);
+				//obj.header = tmp;
+				for (i = 0; i < data.length; i++) {
 					tmp = new MenuItem();
 					angular.copy(data[i], tmp);
 					obj.menuItemList.push(tmp);
@@ -109,215 +125,16 @@
 				console.log(response);
 			});
 		};
-		obj.routeTimeOut = function(){
-			obj.userItemList = [];
+		obj.getAndToggleRightMenu =function (){
+			obj.header = [];
 			$http({
-				url: "http://" + location.host + "/api/components/users/",
+				url: "http://" + location.host + "/api/menu/header",
 				method: "GET"
 			}).success(function(data, status, headers, config) {
-				for (i = 0; i < data.length; i++) {
-					tmp = new UserItem();
-					angular.copy(data[i], tmp);
-					obj.userItemList.push(tmp);
-					console.log(tmp);
-				}
-				$rootScope.$broadcast("buildUser");
-			}).error(function(data, status, headers, config) {
-				console.log('Error');
-				console.log(response);
-			});
-		}
-		obj.getRequests = function(){
-			obj.requestItemList = [];
-			$http({
-				url: "http://" + location.host + "/api/components/events/?request=requests",
-				method: "GET"
-			}).success(function(data, status, headers, config) {
-				for (i = 0; i < data.length; i++) {
-					tmp = new EventItem();
-					angular.copy(data[i], tmp);
-					obj.requestItemList.push(tmp);
-				}
-				$rootScope.$broadcast('buildRequests');
-				console.log("event request list "+obj.requestItemList);
-			}).error(function(data, status, headers, config) {
-				console.log('Error');
-				console.log(response);
-			});
-		}
-		obj.getReport = function(){
-			obj.report = [];
-			$http({
-				url: "http://" + location.host + "/api/sql/reports/",
-				method: "GET"
-			}).success(function(data, status, headers, config) {
-				for (i = 0; i < data.length; i++) {
-					tmp = new Report();
-					angular.copy(data[i], tmp);
-					obj.report.push(tmp);
-					console.log(tmp);
-				}
-				$rootScope.$broadcast('buildReports');
-				console.log(obj.report);
-			}).error(function(data, status, headers, config) {
-				console.log('Error');
-				console.log(response);
-			});
-		};
-		obj.getEvents = function(selector){
-			obj.eventItemList = [];
-			$http({
-				url: "http://" + location.host + "/api/components/events/?request="+selector,
-				method: "GET"
-			}).success(function(data, status, headers, config) {
-				for (i = 0; i < data.length; i++) {
-					tmp = new EventItem();
-					angular.copy(data[i], tmp);
-					obj.eventItemList.push(tmp);
-					console.log(tmp);
-				}
-				if(selector === 'events')
-					$rootScope.$broadcast('buildEvents');
-				else if(selector === 'myevents')
-					$rootScope.$broadcast('buildMyEvents');
-			}).error(function(data, status, headers, config) {
-				console.log('Error');
-				console.log(response);
-			});
-		};
-		obj.addEvent = function(){
-			$rootScope.$broadcast('showAddEventModal');
-		};
-		obj.addUser = function(){
-			$rootScope.$broadcast('showAddUserModal');
-		};
-		obj.deleteUser = function(userType, userName){
-			$http({
-				url: "http://" + location.host + "/api/sql/delete/user/",
-				method: "POST",
-				data: {
-					request:'deleteById',
-					tableSelect:userType,
-					Semail:userName
-				}
-			}).success(function(data, status, headers, config) {
-				console.log('got populate response '+data)
-				if(data === ' delete-user-success '){
-					$rootScope.$broadcast('delete-user-request-accepted');
-				}else if(data === 'insert-server-error'){
-					$rootScope.$broadcast('delete-user-request-denied');
-				}
-			}).error(function(data, status, headers, config) {
-				console.log('Error this');
-				console.log(response);
-			});
-		}
-		obj.deleteEvent = function(deleteEid){
-			$http({
-				url: "http://" + location.host + "/api/sql/delete/event/",
-				method: "POST",
-				data: {
-					request:'deleteById',
-					eid:deleteEid
-				}
-			}).success(function(data, status, headers, config) {
-				console.log('got populate response '+data)
-				if(data === ' delete-event-success '){
-					$rootScope.$broadcast('event-request-accepted');
-				}else if(data === 'delete-server-error'){
-					$rootScope.$broadcast('delete-event-request-denied');
-				}
-			}).error(function(data, status, headers, config) {
-				console.log('Error this');
-				console.log(response);
-			});
-		}
-		obj.updateEvent = function(event){
-			$http({
-				url: "http://" + location.host + "/api/sql/update/event/",
-				method: "POST",
-				data: {
-					request:'updateById',
-					event:event
-				}
-			}).success(function(data, status, headers, config) {
-				console.log('got populate response '+data)
-				if(data === 'update-event-request-accepted'){
-					$rootScope.$broadcast('event-request-accepted');
-				}else if(data === 'update-server-error'){
-					$rootScope.$broadcast('update-event-request-denied');
-				}
-			}).error(function(data, status, headers, config) {
-				console.log('Error this');
-				console.log(response);
-			});
-		}
-		obj.updateUser = function(user){
-			$http({
-				url: "http://" + location.host + "/api/sql/update/user/",
-				method: "POST",
-				data: {
-					request:'updateById',
-					user:user
-				}
-			}).success(function(data, status, headers, config) {
-				console.log('got populate response '+data)
-				if(data === 'update-user-request-accepted'){
-					$rootScope.$broadcast('update-user-request-accepted');
-				}else if(data === 'update-server-error'){
-					$rootScope.$broadcast('update-user-request-denied');
-				}
-			}).error(function(data, status, headers, config) {
-				console.log('Error this');
-				console.log(response);
-			});
-		}
-		obj.submitAddEventRequest = function(event){
-			console.log(event);
-			$http({
-				url: "http://" + location.host + "/api/sql/insert/event/",
-				method: "POST",
-				data: event
-			}).success(function(data, status, headers, config) {
-				console.log('got populate response '+data)
-				if(data === 'insert-success'){
-					$rootScope.$broadcast('add-event-request-success');
-				}else if(data === 'insert-server-error'){
-					$rootScope.$broadcast('add-event-request-denied');
-				}
-			}).error(function(data, status, headers, config) {
-				console.log('Error this');
-				console.log(response);
-			});
-		}
-		obj.submitAddUserRequest = function(user){
-			console.log(user);
-			$http({
-				url: "http://" + location.host + "/api/sql/insert/user/",
-				method: "POST",
-				data: user
-			}).success(function(data, status, headers, config) {
-				console.log('got populate response '+data)
-				if(data === 'insert-success'){
-					$rootScope.$broadcast('add-user-request-success');
-				}else if(data === 'insert-server-error'){
-					$rootScope.$broadcast('add-user-request-denied');
-				}
-			}).error(function(data, status, headers, config) {
-				console.log('Error this');
-				console.log(response);
-			});
-		};
-		obj.getState = function(){
-			obj.state = [];
-			$http({
-				url: "http://" + location.host + "/api/state/",
-				method: "GET"
-			}).success(function(data, status, headers, config) {
-				obj.state = data;
-				console.log(obj.state);
-					console.log('true '+obj.state);
-					$rootScope.$broadcast('buildState');
+				tmp = new HeaderItem();
+				angular.copy(data[0], tmp);
+				obj.header = tmp;
+				$rootScope.$broadcast("populate-right");
 			}).error(function(data, status, headers, config) {
 				console.log('Error');
 				console.log(response);
@@ -358,14 +175,39 @@
 			});
 		}
 		obj.showSignInModal = function(){
+			console.log("calling the modal")
 			$rootScope.$broadcast('showSignInModal');
 		};
 		return obj;
 	};
+	function Routes ($routeProvider, $locationProvider) {
+		$routeProvider.when('/', {
+			templateUrl: './templates/servers/',
+		}).when('/serversRt', {
+			templateUrl: './templates/servers/',
+			controller: 'serversController',
+		}).when('/vmRt', {
+			templateUrl: './templates/vm/',
+			controller: 'vmController'
+		}).when('/wsgRt', {
+			templateUrl: './templates/wsg/',
+			controller: 'wsgController'
+		}).when('/wsuRt', {
+			templateUrl: './templates/wsu/',
+			controller: 'wsuController'
+		}).when('/usprRt', {
+			templateUrl: './templates/profile/',
+			controller: 'profilesController'
+		});
+		// configure html5 to get links working on jsfiddle
+		$locationProvider.html5Mode(true);
+	};
 	/* Author: Jesus Chavez
 	 * Controller for side nav
 	 */
-	function NavCtrl($scope, $mdSidenav, $timeout, global, $route) {
+	function navCtrl($scope, $mdSidenav, $timeout, global, $route) {
+		var originatorEv, mdOpenThis;
+		global.initRequest();
 		$scope.msg = {
 			"msg": "welcome, please sign in"
 		};
@@ -373,7 +215,19 @@
 			global.getAndToggleMenu();
 
 		};
-		$scope.$on("populate", function() {
+		$scope.openMenu = function($mdOpenMenu, ev) {
+      originatorEv = ev;
+			mdOpenThis = $mdOpenMenu;
+			global.getAndToggleRightMenu();
+    };
+		$scope.$on("populate-init", function(){
+			populate_right();
+		});
+		$scope.$on("populate-right", function(){
+			populate_right();
+			toggle_right();
+		});
+		$scope.$on("populate", function($mdOpenMenu) {
 			populate();
 			toggle('left');
 		});
@@ -383,16 +237,21 @@
 				global.showSignInModal();
 			} else if (a == 'signout') {
 				global.signOut();
-			}else if (a === 'getusers'){
+			}else if (a === 'server'){
 				//global.getUsers();
-			} else if (a === 'addevent'){
+			} else if (a === 'vm'){
 				global.addEvent();
-			} else if (a === 'adduser'){
+			} else if (a === 'wg'){
 				global.addUser();
-			} else if( a === 'myprofile'){
+			} else if (a === 'wu'){
+				global.addUser();
+			}  else if( a === 'stat'){
+				$route.reload();
+			} else if( a === 'profile'){
+				$route.reload();
+			} else if( a === 'signout'){
 				$route.reload();
 			}
-			return toggle('left');
 		};
 		$scope.$on('logoutResponse', function(){
 			global.getState();
@@ -400,28 +259,37 @@
 		function populate() {
 			$scope.menuItems = [];
 			$scope.menuItems = global.menuItemList;
-			$scope.header = global.header;
+			//$scope.header = global.header;
 			console.log(global.menuItemList);
-			console.log(global.header);
+			//console.log(global.header);
 		};
 
 		function toggle(side) {
 			$mdSidenav(side).toggle();
 		}
+		function populate_right() {
+			$scope.header = global.header;
+			console.log(global.header);
+		}
+		function toggle_right(){
+			mdOpenThis(originatorEv);
+		}
 
 	};
-	function ModalDemoCtrl ($uibModal, $scope, $log, $document,global) {
+	function loginModalCtrl ($uibModal, $scope, $log, $document,global) {
 		var $ctrl = this;
 		$ctrl.animationsEnabled = true;
 		$ctrl.selectedItem;
+		
 		$scope.$on('showSignInModal', function() {
+			console.log("showing modal");
 			var parentElem = angular.element($document[0].querySelector('.modal-demo'));
 			var modalInstance = $uibModal.open({
 					animation: $ctrl.animationsEnabled,
 					ariaLabelledBy: 'modal-title',
 					ariaDescribedBy: 'modal-body',
-					templateUrl: 'templates/panel/panel.tmpl.1.03.html',
-					controller: 'ModalInstanceCtrl',
+					templateUrl: '/templates/panel/panel.tmpl.1.03.html',
+					controller: 'loginModalInstanceCtrl',
 					controllerAs: '$ctrl',
 					size: 'sm',
 					appendTo: parentElem
@@ -434,7 +302,7 @@
 			});
 		});
 	};
-	function ModalInstanceCtrl ($uibModalInstance, $scope, $timeout, $window, global) {
+	function loginModalInstanceCtrl ($uibModalInstance, $scope, $timeout, $window, global) {
 		var $ctrl = this;
 		$ctrl.emitItem = '';
 		$ctrl.emitItemBk = '';
@@ -449,7 +317,6 @@
 		$scope.$on('loginSuccess', function() {
 			$ctrl.state.msgText = 'login success';
 			$ctrl.state.cssClass = '#90EE90';
-			//global.getAndToggleMenu();
 			$timeout(function() {
 				$uibModalInstance.close('loginSuccess');
 			}, 500);
@@ -466,7 +333,7 @@
 			$uibModalInstance.dismiss('close');
 		};
 	};
-	function AddEventModalCtrl($uibModal, $scope, $log, $document){
+	function AddServerModalCtrl($uibModal, $scope, $log, $document){
 		var $ctrl = this;
 		$ctrl.animationsEnabled = true;
 		$ctrl.selectedItem;
@@ -477,8 +344,8 @@
 					animation: $ctrl.animationsEnabled,
 					ariaLabelledBy: 'modal-title',
 					ariaDescribedBy: 'modal-event',
-					templateUrl: 'templates/panel/addEventPanel.html',
-					controller: 'AddEventModalInstanceCtrl',
+					templateUrl: 'templates/panel/add/serverPanel.html',
+					controller: 'AddServerModalInstanceCtrl',
 					controllerAs: '$ctrl',
 					size: 'lg',
 					appendTo: parentElem
@@ -490,60 +357,25 @@
 			});
 		});
 	}
-	function AddEventModalInstanceCtrl ($uibModalInstance, $scope, $timeout, global) {
+	function AddServerModalInstanceCtrl ($uibModalInstance, $scope, $timeout, global) {
 		var $ctrl = this;
-    $ctrl.event = {
-			'eventId': '',
-			'eventName':'',
-			'eventDescription':'',
-			'eventDate':'',
-			'eventLocation':'',
-			'eventVolunteerCount':'',
-			'eventTimeSlot': {
-				'start':'',
-				'end':''
-			}
+    $ctrl.server = {
+			'ip': '',
+			'wsgroups':'',
+			'wsunits':''
 		}
-		$ctrl.state={
-			'cssClass':'',
-			'msgText':''
-		};
 		$ctrl.n = 1;
 		$ctrl.checkBoxSelected = false;
 		$ctrl.isDisabled = false;
 		$ctrl.selectTimeSlots = 0;
-		$ctrl.update = function(){
-			$ctrl.timeslots = new Array($ctrl.n);
-			for(i = 0; i < $ctrl.timeslots.length; i++){
-				console.log(i)
-				$ctrl.timeslots[i] = {
-					'start': $ctrl.timeslots[i-1].end,
-					'end': new Date(),
-					'nVolunteers':0.00
-				}
-			}
-		}
-		$ctrl.submitAddEventRequest = function() {
-			global.submitAddEventRequest($ctrl.event);
+		$ctrl.submitAddServerRequest = function() {
+			global.submitAddServerRequest($ctrl.event);
 			console.log($ctrl.event);
 		};
 		$ctrl.closeLogInDialog = function() {
 			console.log($ctrl.event);
 			$uibModalInstance.dismiss('close');
 		};
-		$ctrl.selectChanged = function(){
-			$ctrl.selectTimeSlots = parseInt($ctrl.selectTimeSlots);
-			$ctrl.event.timeSlots.n=$ctrl.selectTimeSlots;
-		}
-		$ctrl.getNumber= function(){
-			var num =$ctrl.n;
-			console.log(num);
-			return new Array(num);
-		}
-		$ctrl.getIsDisabled = function(){
-			console.log("'"+$ctrl.isDisabled+"'");
-			return $ctrl.isDisabled;
-		}
 		$scope.$on('add-event-request-success', function(){
 			$ctrl.state.msgText = 'add-user-request-success';
 			$ctrl.state.cssClass = '#90EE90';
@@ -558,251 +390,38 @@
 			$ctrl.state.cssClass = 'red';
 		});
 	};
-	function AddEventModalInstanceConfig($mdThemingProvider){
+	function blackModalInstanceConfig($mdThemingProvider){
 		$mdThemingProvider.theme('docs-dark', 'default')
       .primaryPalette('yellow')
       .dark();
 		
 	}
-	function AddUserModalCtrl($uibModal, $scope, $log, $document){
-		var $ctrl = this;
-		$ctrl.animationsEnabled = true;
-		$ctrl.selectedItem;
-		$scope.$on('showAddUserModal', function(){
-			console.log('what');
-			var parentElem = angular.element($document[0].querySelector('.modal-user'));
-			var modalInstance = $uibModal.open({
-					animation: $ctrl.animationsEnabled,
-					ariaLabelledBy: 'modal-title',
-					ariaDescribedBy: 'modal-body',
-					templateUrl: 'templates/panel/AddUserPanel.html',
-					controller: 'AddUserModalInstanceCtrl',
-					controllerAs: '$ctrl',
-					size: 'lg',
-					appendTo: parentElem
-			});
-			modalInstance.result.then(function(selectedItem) {
-				$ctrl.selected = selectedItem;
-			}, function() {
-				$log.info('Modal was dismissed at: ' + new Date());
-			});
-		});
-	};
-	function AddUserModalInstanceCtrl ($uibModalInstance, $scope, $timeout, global) {
-		var $ctrl = this;
-    $ctrl.user = {
-      'userType': '',
-      'userName': '',
-      'firstName': '',
-			'middleInit':'',
-      'lastName': '',
-			'userPass': '',
-			'telephone':'',
-			'eventPreference':'',
-			'userClass':''
-    };
-		$ctrl.state={
-			'cssClass':'',
-			'msgText':''
-		};
-		$ctrl.isDisabled = false;
-		$ctrl.submitAddUserRequest = function() {
-			global.submitAddUserRequest($ctrl.user);
-			console.log($ctrl.user);
-		};
-		$ctrl.closeLogInDialog = function() {
-			$uibModalInstance.dismiss('close');
-		};
-		$ctrl.selectChanged = function(){
-			var select =$ctrl.user.userType; 
-			if(select === 'admin'||select==='guest'){
-				$ctrl.isDisabled = true;
-			}else{
-				$ctrl.isDisabled = false;
-			}
-		}
-		$ctrl.getIsDisabled = function(){
-			console.log("'"+$ctrl.isDisabled+"'");
-			return $ctrl.isDisabled;
-		}
-		$scope.$on('add-user-request-success', function(){
-			$ctrl.state.msgText = 'add-user-request-success';
-			$ctrl.state.cssClass = '#90EE90';
-			$timeout(function() {
-				$uibModalInstance.close('loginSuccess');
-				global.routeTimeOut();
-			}, 500);
-		});
-		$scope.$on('add-user-request-denied', function(){
-			$ctrl.state.msgText = 'login failed, incorrect username/password combination';
-			$ctrl.state.cssClass = 'red';
-		});
-	};
-	function AddUserModalInstanceConfig($mdThemingProvider){
-		$mdThemingProvider.theme('docs-dark', 'default')
-      .primaryPalette('yellow')
-      .dark();
+	function serversController($route, $routeParams, $location, $scope, global) {
 		
-	}
-	function Routes ($routeProvider, $locationProvider) {
-		$routeProvider.when('/team12', {
-			templateUrl: './templates/events/',
-
-		}).when('/eventsRt', {
-			templateUrl: './templates/events/',
-			controller: 'eventsController',
-		}).when('/aboutRt', {
-			templateUrl: './templates/article/about/',
-			controller: 'aboutController'
-		}).when('/contactRt', {
-			templateUrl: './templates/article/contact/',
-			controller: 'contactController'
-		}).when('/myeventsRt', {
-			templateUrl: './templates/myevents/',
-			controller: 'myeventsController'
-		}).when('/myprofileRt', {
-			templateUrl: './templates/components/profile/',
-			controller: 'myprofileController'
-		}).when('/usersRt', {
-			templateUrl: './templates/users/',
-			controller: 'usersCtrl'
-		}).when('/reportsRt', {
-			templateUrl: './templates/reports/',
-			controller: 'reportsController'
-		});
-		// configure html5 to get links working on jsfiddle
-		$locationProvider.html5Mode(true);
 	};
-	function reportsController($route, $routeParams, $location, $scope, global){
-		global.getReport();
-		$scope.report = [];
-		$scope.$on('buildReports', function() {
-			$scope.report = global.report;
-		});
-	}
-	function eventsController($route, $routeParams, $location, $scope, global) {
-		$scope.$on('buildEvents', function(){
-			console.log('building events events');
-			$scope.events = global.eventItemList;
-			global.getState();
-		});
-		$scope.$on('buildState', function(){
-			console.log('building events state');
-			$scope.state = global.state;
-		});
-		$scope.signUp = function(eventId){
-			console.log('sign up');
-			global.signUp(eventId);
-		};
+	function vmController($route, $routeParams, $location, $scope, global) {
+		
 	};
-
-	function aboutController($route, $routeParams, $location) {
+	function wsgController($route, $routeParams, $location, $scope, global) {
+		
+	};
+	function wsuController($route, $routeParams, $location, $scope, global) {
+		
+	};
+	function profilesController($route, $routeParams, $location) {
 
 	};
 
-	function contactController($route, $routeParams, $location) {
-
-	};
-
-	function myeventsController($route, $routeParams, $location, $scope, global) {
-		global.getEvents('myevents');
-		global.getRequests();
-		$scope.requests = {
-			'eventId': '',
-			'eventName':'',
-			'eventLocation':'',
-			'eventName':'',
-			'eventVolunteerCount':''
-		};
-		$scope.event = {
-			'eventId': '',
-			'eventName':'',
-			'eventLocation':'',
-			'eventName':'',
-			'eventVolunteerCount':''
-		};
-		$scope.isModified = true;
-		$scope.selected = {};
-		$scope.$on('buildMyEvents', function(){
-			console.log('building my events ');
-			$scope.events = global.eventItemList;
-			
-		});
-		$scope.$on('buildRequests', function(){
-			$scope.requests = global.requestItemList;
-		});
-		$scope.$on('event-request-accepted', function(){
-			global.getEvents('myevents');
-		});
-		$scope.delete = function(eid){
-			global.deleteEvent(eid);
-		};
-		$scope.modify = function(event){
-			console.log('modifying');
-			$scope.selected = event;
-			$scope.isModified = false;
-		}
-		$scope.save = function(event){
-			$selected = '';
-			global.updateEvent(event);
-			$scope.isModified = true;
-		}
-	};
-
-	function myprofileController($route, $routeParams, $location) {
-
-	};
-
-	function usersCtrl($route, $routeParams, $location, $scope, global) {
-		global.routeTimeOut();
-		$scope.users = {};
-		$scope.isModified = true;
-		$scope.selected = {};
-		$scope.$on('buildUser', function(){
-			console.log('bulding my users');
-			$scope.users = global.userItemList;
-		});
-		$scope.$on('delete-user-request-accepted', function(){
-			global.routeTimeOut();
-		});
-		$scope.$on('update-user-request-accepted', function(){
-			global.routeTimeOut();
-		});
-		$scope.delete= function (userType, userName){
-			global.deleteUser(userType, userName);
-			console.log('deleting' +userType+' '+userName);
-		};
-		$scope.modify= function (user){
-			console.log('modifying');
-			$scope.selected = user;
-			$scope.isModified = false;
-		};
-		$scope.save= function (user){
-			$selected = '';
-			global.updateUser(user);
-			$scope.isModified = true;
-		};
-	};
-	app.controller('NavCtrl', NavCtrl);
-	app.controller('ModalDemoCtrl', ModalDemoCtrl);
-	app.controller('AddUserModalCtrl', AddUserModalCtrl);
-	app.controller('AddEventModalCtrl', AddEventModalCtrl);
-	app.controller('ModalInstanceCtrl', ModalInstanceCtrl);
-	app.controller('AddEventModalInstanceCtrl', AddEventModalInstanceCtrl);
-	app.controller('AddUserModalInstanceCtrl', AddUserModalInstanceCtrl);
-	app.controller('eventsController', eventsController);
-	app.controller('aboutController', aboutController);
-	app.controller('contactController', contactController);
-	app.controller('myeventsController', myeventsController);
-	app.controller('myprofileController', myprofileController);
-	app.controller('contactController', contactController);
-	
-	app.controller('reportsController', reportsController);
-	
-	app.controller('usersCtrl', usersCtrl);
+	app.controller('navCtrl', navCtrl);
+	app.controller('loginModalCtrl', loginModalCtrl);
+	app.controller('AddServerModalCtrl', AddServerModalCtrl);
+	app.controller('AddServerModalInstanceCtrl', AddServerModalInstanceCtrl);
+	app.controller('serversController', serversController);
+	app.controller('vmController', vmController);
+	app.controller('wsgController', wsgController);
+	app.controller('wsuController', wsuController);
+	app.controller('profilesController', profilesController);
 	app.factory('global', global);
 	app.config(Routes);
-	app.config(AddEventModalInstanceConfig);
-	app.config(AddUserModalInstanceConfig);
-
+	app.config(blackModalInstanceConfig);
 })(angular);
