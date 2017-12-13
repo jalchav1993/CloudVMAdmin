@@ -10,6 +10,17 @@ from TestbedManagementSystem.Files.Database.VirtualMachineTable import VirtualMa
 from TestbedManagementSystem.Files.Database.WorkshopHistoryTable import WorkshopHistoryTable
 from TestbedManagementSystem.Files.Database.WorkshopTable import WorkshopTable
 
-class Database_Manager:
-    
-    
+class Database_Manager:  
+#     
+#     def createConfigList(self,colum,values):
+#         config = dict(zip(colum, values))
+#         return config
+#       
+#         
+#     
+#     values = ["Admin1","Admin@Email.com","AdminName","AdminLast","AdminPass"]   
+#     colum = AdminTable.getAdminColums(None)
+#     config = createConfigList(None,colum,values)
+#       
+#     print (config) 
+#     print(config['Aemail'])   

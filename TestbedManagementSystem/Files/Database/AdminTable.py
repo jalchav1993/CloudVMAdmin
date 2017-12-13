@@ -15,7 +15,6 @@ class AdminTable:
     def insertAdmin(self,configuration):
         UserTable.insertUser(self, configuration)    
         
-             
     def selectAdmin(self,configuration):
         UserTable.selectUser(self, configuration)        
     
@@ -25,6 +24,9 @@ class AdminTable:
     def removeAdmin(self,configuration):
         UserTable.removeUser(self, configuration)
 
+    def getAdminColums(self):
+        colum = ['Aemail','Uemail','Ufname','Ulname','Upassword']
+        return colum
     def __toDict(self):
         dict = {'Aemail':self.__Aemail,'Uemail': self.__email,'Ufname': self.__fname, 
                 'Ulname': self.__lname,'Upassword':self.__password}
