@@ -1,31 +1,15 @@
-from TestbedManagementSystem.Files.Database.UserDatabase import UserDatabase
-from TestbedManagementSystem.Files.Database.AdminDatabase import AdminDatabase
-
-
-
+from TestbedManagementSystem.Files.Database.AdminTable import AdminTable
+from TestbedManagementSystem.Files.Database.CloneTable import CloneTable
+from TestbedManagementSystem.Files.Database.NetworkAdapterTable import NetworkAdapterTable
+from TestbedManagementSystem.Files.Database.ReferenceMaterialTable import ReferenceMaterialTable
+from TestbedManagementSystem.Files.Database.RegUserTable import RegUserTable
+from TestbedManagementSystem.Files.Database.ServerTable import ServerTable
+from TestbedManagementSystem.Files.Database.StatisticTable import StatisticTable
+from TestbedManagementSystem.Files.Database.UserTable import UserTable
+from TestbedManagementSystem.Files.Database.VirtualMachineTable import VirtualMachineTable
+from TestbedManagementSystem.Files.Database.WorkshopHistoryTable import WorkshopHistoryTable
+from TestbedManagementSystem.Files.Database.WorkshopTable import WorkshopTable
 
 class Database_Manager:
-    dict = {'Uemail': 'test@test.com','Ufname': '', 
-            'Ulname': '','Upassword':''}
-    user = UserDatabase(dict)
-    print(user.selectUser(dict))
     
-    dict2 = {'Uemail': 'test@test.com','Ufname': 'testName', 
-             'Ulname': 'testLastName','Upassword':'testPass'}
-    user = UserDatabase(dict2)
-    print(user.updateUser(dict2))
-    print(user.resetPassword(dict2['Uemail'],'testPass'))
-    print(user.removeUser(dict2))
-    dict3 = {'Uemail': 'test2@test.com','Ufname': '2testName2', 
-             'Ulname': '2testLastName2','Upassword':'2testPass2'}
-    user.printAllUsers();
-    user = UserDatabase(dict3)
-    print(user.insertUser(dict3))
-    user.printAllUsers();
-    print(user.removeUser(dict3))
-    user.printAllUsers();
-
-    adDict = []
-    adDict.append({'Aemail':'admin@test.com','dict':dict2})
-    admin = AdminDatabase(adDict)
-    admin.insertAdmin(adDict)
+    

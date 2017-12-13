@@ -1,7 +1,8 @@
 from TestbedManagementSystem.Files.Database.configurationDB import configurationDB
-from TestbedManagementSystem.Files.Database.UserDatabase import UserDatabase
+from TestbedManagementSystem.Files.Database.UserTable import UserTable
 
-class AdminDatabase:
+
+class AdminTable:
     
     def __init__(self,configuration):
         self.__Aemail = configuration['Aemail']
@@ -12,14 +13,17 @@ class AdminDatabase:
         self.__password = self.__dict['Upassword']
         
     def insertAdmin(self,configuration):
-        UserDatabase.insertUser(self, configuration)    
+        UserTable.insertUser(self, configuration)    
         
              
     def selectAdmin(self,configuration):
-        UserDatabase.selectUser(self, configuration)        
+        UserTable.selectUser(self, configuration)        
     
     def updateAdmin(self,configuration):
-        UserDatabase.updateUser(self, configuration)
+        UserTable.updateUser(self, configuration)
+        
+    def removeAdmin(self,configuration):
+        UserTable.removeUser(self, configuration)
 
     def __toDict(self):
         dict = {'Aemail':self.__Aemail,'Uemail': self.__email,'Ufname': self.__fname, 
