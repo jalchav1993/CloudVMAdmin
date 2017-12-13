@@ -65,24 +65,20 @@ class WorkshopUnit:
         for vm in vms:
             set.add(HardwareManager.clone(vm))
             
-            
-    def cloneUnit(self, unitName):
-        numUnits = GetFromGui
-        for x in range(numUnits):
-            hardwareManager.clone(unitName)
-            x.vrdp = getFromGui
-            x.nAdapterName = GetFromGui
-            x.nAdampterSeed = GetFromGui
-            
     def cloneUnits(self, numUnits):
-        a = 0
-        
-            for each numUnits:
-                newName = unitName + a
-                newUnit = WorkshopUnit(configurations)
-                unitSet.add(newUnit)
-                a+=1
-            return unitSet
+       newUnits = set()
+       newVms = set()
+       for i in range(0, numUnits):
+           uName = self.__unitName + i
+           uPort = self.__connectionString += 1
+           for each vm in self.__vms:
+               newVm = HardwareManager.clone(vm)
+               newVms.add(newVm)
+            newconfig = {"unitName" : uName, "vms" : newVms, "description" : self.__description, "referenceMaterial" : self.__referenceMaterial, "connectionString" : uPort, "sessionType" : self.__sessionType, "status" : self.__status} 
+            #need to configure a new dictionary 
+            newUnit = WorkshopUnit(newConfig)
+            newUnits.add(newUnit)
+        return newUnits
         
     def unitDetailView(self):
         return configurations

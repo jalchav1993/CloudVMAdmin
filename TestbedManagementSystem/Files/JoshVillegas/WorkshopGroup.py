@@ -30,17 +30,13 @@ class WorkshopGroup:
         dict = {'groupName' : self.__groupName, 'associatedUnits' : self.__associatedUnits}
         return dict
     
-    deg getGroupStatus(self,)
-    
-    def cloneGroups(self, numGroups):
-        a = 0
-        
-            for each numGroups:
-                newName = groupName + a
-                newGroup = WorkshopGroup(configurations)
-                groupSet.add(newGroup)
-                a+=1
-            return groupSet
+    def cloneGroup(self, numGroups):
+        newGroups = set()
+        newUnits = set()
+        for i in range(0, numGroups):
+            #need to finish
+            
+            
         
     def workshopGroupDetailView(self):
         return configurations
