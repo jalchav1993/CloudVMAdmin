@@ -29,6 +29,7 @@ class UserInteractionManager:
         return (ws.getReferenceMaterial())
     
     def createWorkshop(self):
+        
         return
 
     def deleteWorkshop(self):

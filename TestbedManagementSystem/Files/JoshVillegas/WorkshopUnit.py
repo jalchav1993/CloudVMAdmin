@@ -3,7 +3,11 @@ class WorkshopUnit:
         print("Workshop Unit created")
         self.__unitName = configurations['unitName']
         self.__vms = configurations['vms']
+        self.__description = configurations['description']
+        self.__referenceMaterial = configurations['referenceMaterial']
         self.__connectionString = configuration['connectionString']
+        self.__sessionType = configurations['sessionType']
+        self.__status = configurations['status']
         self.__createUnitRecord()
         
     def getVmList(self):
@@ -49,8 +53,41 @@ class WorkshopUnit:
     def suspendAllVms(self):
     
     def removeVm(self, vmname):
+        if vmname in vms:
+            vms.remove(vmname)
         
     def removeAllVms(self):
+        vms.clear()
+        
+    def createUnit(self, configurations):
+        newUnit = WorkshopUnit(configurations)
+        new = set()
+        for vm in vms:
+            set.add(HardwareManager.clone(vm))
+            
+            
+    def cloneUnit(self, unitName):
+        numUnits = GetFromGui
+        for x in range(numUnits):
+            hardwareManager.clone(unitName)
+            x.vrdp = getFromGui
+            x.nAdapterName = GetFromGui
+            x.nAdampterSeed = GetFromGui
+            
+    def cloneUnits(self, numUnits):
+        a = 0
+        
+            for each numUnits:
+                newName = unitName + a
+                newUnit = WorkshopUnit(configurations)
+                unitSet.add(newUnit)
+                a+=1
+            return unitSet
+        
+    def unitDetailView(self):
+        return configurations
+                
+            
     
      
     

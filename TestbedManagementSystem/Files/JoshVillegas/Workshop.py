@@ -30,3 +30,5 @@ class Workshop:
         dict = {'workshopName' : self.__workshopName, 'referenceMaterial' : self.__referenceMaterial, 'status' : self.__status}
         return dict
     
+    def createWorkshop(self, configurations):
+    
