@@ -4,6 +4,5 @@
 	{"template": "Workshop Groups", "action":"wg","route":"wsgRt"},
 	{"template": "Workshop Units", "action":"wu","route":"wsuRt"},
 	{"template": "Statistics", "action":"stat","route":"statsRt"},
-	{"template": "User Profiles", "action":"profile","route":"usprRt"},
-	{"template": "Sign Out", "action":"signout","route":"serversRt"}
+	{"template": "User Profiles", "action":"profile","route":"usprRt"}
 ]

@@ -41,15 +41,56 @@
 		    <h2 class="md-flex">Workshop Groups</h2>
 		  </div>
 		</md-toolbar>
-		
 		<md-content flex layout-padding>
-			<md-list-item>
-				<p> Workshop Group A</p>
-				<div flex="33"style = "height:100%; and overflow:auto;"></div>
-				<p> 2 </p>
-				<p>172.123.213.2</p>
-			  <i class=" material-icons"><span class = "white-text">brightness_3</span></i>
-			</md-list-item>
+			<uib-accordion close-others="oneAtATime">
+				<div uib-accordion-group class="panel-default" >
+					<uib-accordion-heading ng-click = "">
+						<md-list-item>
+							<p> Workshop Group A</p>
+							<div flex="33"style = "height:100%; and overflow:auto;"></div>
+							<p> 2 </p>
+							<p>172.123.213.2</p>
+						  <i class=" material-icons"><span class = "white-text">brightness_3</span></i>
+						</md-list-item>
+					</uib-accordion-heading>
+					<secion layout = "row">
+						<table class="table" flex>
+					    <tbody>
+					      <tr>
+									<th>Description</th>
+								</tr>
+					      <tr>
+									<td>
+										Description of Workshop Group A 
+									</td>
+								</tr>
+					      <tr>
+									<th>Workshop Units</th>
+								</tr>
+					      <tr>
+									<td>
+										Workshop Unit 1
+									</td>
+								</tr>
+					      <tr>
+									<td>
+										Workshop Unit 1
+									</td>
+								</tr>
+								<tr>
+									<th>Select</th>
+					      </tr>
+								<tr>
+									<td>
+										<md-checkbox class = "md-warn" ng-model="isSelected()">
+										</md-checkbox>
+									</td>
+								</tr>
+					    </tbody>
+					  </table>
+					</section>
+			  </div>
+			</uib-accordion>
 		</md-content>
 	</div>
 </div>
