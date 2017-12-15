@@ -1,8 +1,7 @@
 from TestbedManagementSystem.Files.Database.configurationDB import configurationDB
-from TestbedManagementSystem.Files.Database.UserDatabase import UserDatabase
+from TestbedManagementSystem.Files.Database.UserTable import UserTable
 
-
-class RegUserDatabase:
+class RegUserTable:
     
     def __init__(self,configuration):
         self.__RUemail = configuration['RUemail']
@@ -15,18 +14,18 @@ class RegUserDatabase:
         self.__password = self.__dict['Upassword']
         
     def insertRegUser(self,configuration):
-        UserDatabase.insertUser(self, configuration)    
+        UserTable.insertUser(self, configuration)    
         
              
     def selectRegUser(self,configuration):
-        UserDatabase.selectUser(self, configuration)        
+        UserTable.selectUser(self, configuration)        
     
     def updateRegUser(self,configuration):
-        UserDatabase.updateUser(self, configuration)
+        UserTable.updateUser(self, configuration)
         
         
     def removeUser(self,configuration):
-        UserDatabase.removeUser(self, configuration)
+        UserTable.removeUser(self, configuration)
 
     def __toDict(self):
         dict = {'RUemail':self.__RUemail, 'RUorganizaition' : self.__org,
