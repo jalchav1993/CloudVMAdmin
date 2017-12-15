@@ -19,6 +19,22 @@ class HardwareManager:
             if serverIP == server.getIP():
                 return server
             return None
+        
+    def startVM(self, vmname):
+        vm = self.__getVM(vmname)
+        vm.startVM()
+        
+    def pauseVM(self, vmname):
+        vm = self.__getVM(vmname)
+        vm.pauseVM()
+        
+    def resumeVM(self, vmname):
+        vm = self.__getVM(vmname)
+        vm.resumeVM()
+        
+    def power_downVM(self, vmname):
+        vm = self.__getVM(vmname)
+        vm.power_down()
     
     def getVRDP(self, vmname):
         vm = self.__getVM(vmname)
