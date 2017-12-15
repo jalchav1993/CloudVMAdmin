@@ -64,9 +64,14 @@
 	      <div layout="column" layout-align="top center">
 		 		<md-toolbar>
 		 			<div class="md-toolbar-tools UTEP-theme-color-blue">
-		 	      <md-button class="md-icon-button" ng-click="getAndToggleMenu()">
+		 	      <md-button class="md-icon-button" ng-click="getAndToggleMenu()" ng-hide = "isloading()">
 		 		      <i class=" material-icons"><span class = "white-text">reorder</span></i>
 		 	      </md-button>
+						<div layout="row" layout-sm="column" layout-align="space-around"ng-hide ="!isloading()">
+							<md-progress-circular class = "md-warn" md-diameter="29" >
+								
+							</md-progress-circular>
+						</div>
 					  <!-- This fills the remaining space of the current row -->
 		 	      <span flex></span>
 						<p>{{header.msg}}</p>
@@ -85,14 +90,20 @@
 						</md-menu>
 		 	  	</md-toolbar>
 	      </div>
-				<div ng-controller="loginModalCtrl as $ctrl" class="modal-demo">
-					<div class="modal-parent"></div>
-				</div>
-				<div ng-controller="AddServerModalCtrl as $ctrl" class="modal-user">
-					<div class="modal-parent"></div>
-				</div>
 	    </md-content>
 	  </section>
+	</div>
+	<div ng-controller="loginModalCtrl as $ctrl" class="modal-demo">
+		<div class="modal-parent"></div>
+	</div>
+	<div ng-controller="AddServerModalCtrl as $ctrl" class="modal-server">
+		<div class="modal-parent"></div>
+	</div>
+	<div ng-controller="AddVmModalCtrl as $ctrl" class="modal-vm">
+		<div class="modal-parent"></div>
+	</div>
+	<div ng-controller="AddWgModalCtrl as $ctrl" class="modal-wg">
+		<div class="modal-parent"></div>
 	</div>
 	<div class = "container" ng-controller = "serversController" >
 		<div class = "ng-view"></div>

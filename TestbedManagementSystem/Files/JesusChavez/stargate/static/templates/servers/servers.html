@@ -8,7 +8,7 @@
 <div layout="column">
 		<div layout="row" style = "max-height:53px;">
   		<div flex="33" style = "height:100%; and overflow:auto;">
-				<md-button>
+				<md-button ng-click = "toggleAddServerModal()">
 					+ server
 				</md-button>
 				<md-button>
@@ -62,7 +62,7 @@
 									<th>Select</th>
 									<td>
 										<span style = "display:inline-block">
-											<md-checkbox class = "md-warn" ng-model="true">
+											<md-checkbox class = "md-warn" ng-model="isSelected()">
 											</md-checkbox>
 										</span>
 									</td>

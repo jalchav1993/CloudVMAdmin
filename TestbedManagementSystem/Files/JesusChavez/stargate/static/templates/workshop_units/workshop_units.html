@@ -1,0 +1,56 @@
+<style>
+.diabled-class{
+	background-color:green;
+	color:white;
+}
+</style>
+
+<div layout="column">
+		<div layout="row" style = "max-height:53px;">
+  		<div flex="33" style = "height:100%; and overflow:auto;">
+				<md-button ng-click = "toggleAddWgModal()">
+					+ Unit
+				</md-button>
+				<md-button ng-click = "">
+					Import
+				</md-button>
+				<md-button ng-click = "">
+					Export
+				</md-button>
+				<md-button ng-click = "">
+					Delete
+				</md-button>
+				<md-button ng-click = "">
+					Restore
+				</md-button>
+				<md-button ng-click = "">
+					Clone
+				</md-button>
+			</div>
+  		<div flex="50"style = "height:100%; and overflow:auto;"></div>
+  		<div flex="17"style = "height:100%; and overflow:auto;">
+				<md-input-container>
+					<label>Search</label>
+					<input ng-model="search">
+				</md-input-container>
+			</div>
+		</div>
+	<div layout="row" layout-wrap>
+		<md-toolbar class="md-warn" >
+		  <div class="md-toolbar-tools" layout="row" layout-align="center center">
+		    <h2 class="md-flex">Workshop Units</h2>
+		  </div>
+		</md-toolbar>
+		
+		<md-content flex layout-padding>
+			<md-list-item>
+				<p> Workshop Unit A</p>
+				<div flex="33"style = "height:100%; and overflow:auto;"></div>
+				<p> 2 </p>
+				<p>172.123.213.2</p>
+				<p>Active</p>
+			  <i class=" material-icons"><span class = "white-text">brightness_3</span></i>
+			</md-list-item>
+		</md-content>
+	</div>
+</div>

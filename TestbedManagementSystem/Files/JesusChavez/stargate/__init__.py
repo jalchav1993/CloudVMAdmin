@@ -24,5 +24,14 @@ def get_menu_header():
 def get_init_req():
   return send_from_directory('static', "init.json")
 @stargate.route('/templates/servers/')
-def get_template():
+def get_template_servers():
   return send_from_directory('./static/templates/servers/', 'servers.html')
+@stargate.route('/templates/vm/')
+def get_template_vm():
+  return send_from_directory('./static/templates/vm/', 'vm.html')
+@stargate.route('/templates/workshop_groups/')
+def get_template_wg():
+  return send_from_directory('./static/templates/workshop_groups/', 'workshop_groups.html')
+@stargate.route('/templates/workshop_units/')
+def get_template_wu():
+  return send_from_directory('./static/templates/workshop_units/', 'workshop_units.html')
