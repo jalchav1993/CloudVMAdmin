@@ -8,12 +8,25 @@
 <div layout="column">
 		<div layout="row" style = "max-height:53px;">
   		<div flex="33" style = "height:100%; and overflow:auto;">
-				<md-button ng-click = "toggleAddServerModal()">
-					+ server
+				<md-button ng-click = "toggleAddWgModal()">
+					+ Group
 				</md-button>
-				<md-button>
-					delete
-				</md-button></div>
+				<md-button ng-click = "">
+					Import
+				</md-button>
+				<md-button ng-click = "">
+					Export
+				</md-button>
+				<md-button ng-click = "">
+					Delete
+				</md-button>
+				<md-button ng-click = "">
+					Restore
+				</md-button>
+				<md-button ng-click = "">
+					Clone
+				</md-button>
+			</div>
   		<div flex="50"style = "height:100%; and overflow:auto;"></div>
   		<div flex="17"style = "height:100%; and overflow:auto;">
 				<md-input-container>
@@ -25,48 +38,54 @@
 	<div layout="row" layout-wrap>
 		<md-toolbar class="md-warn" >
 		  <div class="md-toolbar-tools" layout="row" layout-align="center center">
-		    <h2 class="md-flex">Servers</h2>
+		    <h2 class="md-flex">Workshop Groups</h2>
 		  </div>
 		</md-toolbar>
-		
 		<md-content flex layout-padding>
 			<uib-accordion close-others="oneAtATime">
 				<div uib-accordion-group class="panel-default" >
 					<uib-accordion-heading ng-click = "">
-						<span>176.134.567.332</span>
-						<i class="pull-right">Online </i>
-						
+						<md-list-item>
+							<p> Workshop Group A</p>
+							<div flex="33"style = "height:100%; and overflow:auto;"></div>
+							<p> 2 </p>
+							<p>172.123.213.2</p>
+						  <i class=" material-icons"><span class = "white-text">brightness_3</span></i>
+						</md-list-item>
 					</uib-accordion-heading>
 					<secion layout = "row">
 						<table class="table" flex>
-							<thead>
-								<tr>
-									<th>Description</th>
-									<th>Value</th>
-							  </tr>
-					    </thead>
 					    <tbody>
 					      <tr>
-									<th>Workshop Groups</th>
+									<th>Description</th>
+								</tr>
+					      <tr>
 									<td>
-										Workshop Group A
+										Description of Workshop Group A 
 									</td>
 								</tr>
 					      <tr>
 									<th>Workshop Units</th>
+								</tr>
+					      <tr>
 									<td>
-										Workshop Unit c
+										Workshop Unit 1
+									</td>
+								</tr>
+					      <tr>
+									<td>
+										Workshop Unit 1
 									</td>
 								</tr>
 								<tr>
 									<th>Select</th>
-									<td>
-										<span style = "display:inline-block">
-											<md-checkbox class = "md-warn" ng-model="isSelected()">
-											</md-checkbox>
-										</span>
-									</td>
 					      </tr>
+								<tr>
+									<td>
+										<md-checkbox class = "md-warn" ng-model="isSelected()">
+										</md-checkbox>
+									</td>
+								</tr>
 					    </tbody>
 					  </table>
 					</section>
@@ -75,7 +94,3 @@
 		</md-content>
 	</div>
 </div>
-
-
-
-

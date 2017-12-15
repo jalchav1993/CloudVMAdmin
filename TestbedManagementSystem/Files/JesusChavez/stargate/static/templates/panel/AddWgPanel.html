@@ -1,0 +1,42 @@
+<style> 
+.md-datepicker-calendar-pane{ z-index: 1200}
+.md-select-menu-container {z-index: 1200;}
+
+</style>
+<md-content md-theme="docs-dark" layout-gt-sm="row" layout-padding>
+  <label>New Workshop Group</label>
+</md-content>
+<md-content layout-padding>
+	<form name="">
+			<div layout-gt-sm = "column">
+				<md-input-container class="md-block" layout-gt-sm="row">
+	      	<label>Workshop Group</label>
+	        <input ng-model="">
+				</md-input-container>
+	      <md-input-container class="md-block" layout-gt-sm="row">
+	        <label>Workshop Unit</label>
+	        <input ng-model="">
+	      </md-input-container>
+	      <md-input-container class="md-block" layout-gt-sm="row">
+	        <label>Description</label>
+	        <input ng-model="">
+	      </md-input-container>
+	      <md-input-container class="md-block" layout-gt-sm="row">
+	        <label>Refference Material</label>
+	        <input ng-model="">
+	      </md-input-container>
+	      <md-input-container class="md-block" layout-gt-sm="row">
+	        <label>Persistance Session</label>
+	        <input ng-model="">
+	      </md-input-container>
+			</div>
+	</form>
+	<div>
+ 		<md-button ng-click ="">
+	 		Add
+		</md-button>
+		<md-button ng-click = "$ctrl.closeLogInDialog()">
+			Cancel
+		</md-button>
+	</div>
+</md-content>

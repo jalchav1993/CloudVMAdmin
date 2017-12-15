@@ -3,7 +3,11 @@ class WorkshopUnit:
         print("Workshop Unit created")
         self.__unitName = configurations['unitName']
         self.__vms = configurations['vms']
+        self.__description = configurations['description']
+        self.__referenceMaterial = configurations['referenceMaterial']
         self.__connectionString = configuration['connectionString']
+        self.__sessionType = configurations['sessionType']
+        self.__status = configurations['status']
         self.__createUnitRecord()
         
     def getVmList(self):
@@ -49,8 +53,37 @@ class WorkshopUnit:
     def suspendAllVms(self):
     
     def removeVm(self, vmname):
+        if vmname in vms:
+            vms.remove(vmname)
         
     def removeAllVms(self):
+        vms.clear()
+        
+    def createUnit(self, configurations):
+        newUnit = WorkshopUnit(configurations)
+        new = set()
+        for vm in vms:
+            set.add(HardwareManager.clone(vm))
+            
+    def cloneUnits(self, numUnits):
+       newUnits = set()
+       newVms = set()
+       for i in range(0, numUnits):
+           uName = self.__unitName + i
+           uPort = self.__connectionString += 1
+           for each vm in self.__vms:
+               newVm = HardwareManager.clone(vm)
+               newVms.add(newVm)
+            newconfig = {"unitName" : uName, "vms" : newVms, "description" : self.__description, "referenceMaterial" : self.__referenceMaterial, "connectionString" : uPort, "sessionType" : self.__sessionType, "status" : self.__status} 
+            #need to configure a new dictionary 
+            newUnit = WorkshopUnit(newConfig)
+            newUnits.add(newUnit)
+        return newUnits
+        
+    def unitDetailView(self):
+        return configurations
+                
+            
     
      
     

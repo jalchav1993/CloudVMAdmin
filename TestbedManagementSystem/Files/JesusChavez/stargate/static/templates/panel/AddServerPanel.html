@@ -1,0 +1,35 @@
+<style> 
+.md-datepicker-calendar-pane{ z-index: 1200}
+.md-select-menu-container {z-index: 1200;}
+
+</style>
+<md-content md-theme="docs-dark" layout-gt-sm="row" layout-padding>
+  <label>New Server</label>
+</md-content>
+<md-content layout-padding>
+	<form name="$ctrl.serverForm">
+			<div layout-gt-sm = "column">
+				<md-input-container class="md-block" layout-gt-sm="row">
+	      	<label>Server Ip Address</label>
+	        <input ng-model="$ctrl.server.ip">
+				</md-input-container>
+	      <md-input-container class="md-block" layout-gt-sm="row">
+	        <label>User Name</label>
+	        <input ng-model="$ctrl.server.user">
+	      </md-input-container>
+	      <md-input-container class="md-block" layout-gt-sm="row">
+	        <label>Password</label>
+	        <input ng-model="$ctrl.server.pass">
+	      </md-input-container>
+			</div>
+	</form>
+	<div>
+ 		<md-button ng-click ="$ctrl.submitAddEventRequest()">
+	 		Add
+		</md-button>
+		<md-button ng-click = "$ctrl.closeLogInDialog()">
+			Cancel
+		</md-button>
+	</div>
+</md-content>
+

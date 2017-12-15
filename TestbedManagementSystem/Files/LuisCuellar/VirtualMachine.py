@@ -16,6 +16,7 @@ class VirtualMachine:
         self.__snapshot = {"Snapshot": None, "name": ""}
         
         print("Virtual Machine: "+self.__vmname+" created")
+<<<<<<< HEAD
         
         # Enable vrde:
         #session = iVM.create_session()
@@ -25,6 +26,17 @@ class VirtualMachine:
         #Set port
         #server.set_vrde_property("TCP/Ports", "8000")
         
+=======
+        
+        # Enable vrde:
+        #session = iVM.create_session()
+        #server = session.machine.vrde_server
+        #server.enabled = True
+        
+        #Set port
+        #server.set_vrde_property("TCP/Ports", "8000")
+        
+>>>>>>> 60c5cc35dc452055da630d513ef02cf6a512d26d
         self.__setNetworkAdapter() 
         #self.__createVMRecord()
         

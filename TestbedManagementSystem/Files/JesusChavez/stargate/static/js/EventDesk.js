@@ -8,6 +8,7 @@
  * the aplication programing interface was written in PHP, 
  * reference api for any POST/GET Request information,
  * and data base manipulation
+ * Polymorphism rocks all the way
  */
 (function() {
 	//hoisted
@@ -40,25 +41,12 @@
 		this.eventPreference='';
 		this.userClass='';
 	}
-	var EventItem = function(){
-	 	this.eventId= '';
-	 	this.eventName='';
-	 	this.eventDescription='';
-		this.eventLocation='';
-	  this.eventVolunteers='';
-	  this.approved_by='';
-		this.created_by='';
-		this.updated_by='';
-	}
-	var Report= function(){
-		this.Eid = '';
-		this.Hours = '';
-	}
 	/* Author: Jesus Chavez
 	 * Global factory, handles http requests to rest
 	 */
 	function global($rootScope, $http) {
 		var obj = {};
+		obj.busy = "";
 		obj.menuItemList = [];
 		obj.userItemList = [];
 		obj.eventItemList = [];
@@ -89,6 +77,7 @@
 			});
 		}
 		obj.initRequest = function(){
+			$rootScope.$broadcast("isbusy");
 			obj.header = [];
 			$http({
 				url: "http://" + location.host + "/api/init",
@@ -174,10 +163,29 @@
 				console.log(response);
 			});
 		}
-		obj.showSignInModal = function(){
+		obj.showAddVmModal = function(){
 			console.log("calling the modal")
-			$rootScope.$broadcast('showSignInModal');
+			$rootScope.$broadcast("isbusy");
+			$rootScope.$broadcast('showAddVmModal');
 		};
+		obj.showAddServerModal = function(){
+			console.log("calling the modal")
+			$rootScope.$broadcast("isbusy");
+			$rootScope.$broadcast('showAddServerModal');
+		};
+		obj.showLoginModal = function(){
+			console.log("calling the modal")
+			$rootScope.$broadcast("isbusy");
+			$rootScope.$broadcast('showLoginModal');
+		};
+		obj.showAddWgModal = function(){
+			console.log("calling the modal")
+			$rootScope.$broadcast("isbusy");
+			$rootScope.$broadcast('showAddWgModal');
+		};
+		obj.busyOff = function(){
+			$rootScope.$broadcast('notbusy');
+		}
 		return obj;
 	};
 	function Routes ($routeProvider, $locationProvider) {
@@ -190,14 +198,11 @@
 			templateUrl: './templates/vm/',
 			controller: 'vmController'
 		}).when('/wsgRt', {
-			templateUrl: './templates/wsg/',
+			templateUrl: './templates/workshop_groups/',
 			controller: 'wsgController'
 		}).when('/wsuRt', {
-			templateUrl: './templates/wsu/',
+			templateUrl: './templates/workshop_units/',
 			controller: 'wsuController'
-		}).when('/usprRt', {
-			templateUrl: './templates/profile/',
-			controller: 'profilesController'
 		});
 		// configure html5 to get links working on jsfiddle
 		$locationProvider.html5Mode(true);
@@ -207,7 +212,11 @@
 	 */
 	function navCtrl($scope, $mdSidenav, $timeout, global, $route) {
 		var originatorEv, mdOpenThis;
+		busy = true;
 		global.initRequest();
+		$scope.isloading = function (){
+			return busy;
+		}
 		$scope.msg = {
 			"msg": "welcome, please sign in"
 		};
@@ -220,8 +229,16 @@
 			mdOpenThis = $mdOpenMenu;
 			global.getAndToggleRightMenu();
     };
+		$scope.$on("isbusy", function(){
+			busy = true;
+		});
+		$scope.$on("notbusy", function(){
+			console.log(busy);
+			busy = false;
+		});
 		$scope.$on("populate-init", function(){
 			populate_right();
+			global.busyOff();
 		});
 		$scope.$on("populate-right", function(){
 			populate_right();
@@ -234,17 +251,18 @@
 		$scope.getAction = function(a) {
 			console.log(a);
 			if (a == 'signin') {
-				global.showSignInModal();
+				
+				global.showLoginModal();
 			} else if (a == 'signout') {
 				global.signOut();
 			}else if (a === 'server'){
 				//global.getUsers();
 			} else if (a === 'vm'){
-				global.addEvent();
+				//global.addEvent();
 			} else if (a === 'wg'){
-				global.addUser();
+				//global.addUser();
 			} else if (a === 'wu'){
-				global.addUser();
+				//global.addUser();
 			}  else if( a === 'stat'){
 				$route.reload();
 			} else if( a === 'profile'){
@@ -281,7 +299,7 @@
 		$ctrl.animationsEnabled = true;
 		$ctrl.selectedItem;
 		
-		$scope.$on('showSignInModal', function() {
+		$scope.$on('showLoginModal', function() {
 			console.log("showing modal");
 			var parentElem = angular.element($document[0].querySelector('.modal-demo'));
 			var modalInstance = $uibModal.open({
@@ -299,6 +317,7 @@
 				global.getAndToggleMenu();
 			}, function() {
 				$log.info('Modal was dismissed at: ' + new Date());
+				global.busyOff();
 			});
 		});
 	};
@@ -333,26 +352,27 @@
 			$uibModalInstance.dismiss('close');
 		};
 	};
-	function AddServerModalCtrl($uibModal, $scope, $log, $document){
+	function AddServerModalCtrl($uibModal, $scope, $log, $document, global){
 		var $ctrl = this;
 		$ctrl.animationsEnabled = true;
 		$ctrl.selectedItem;
-		$scope.$on('showAddEventModal', function(){
+		$scope.$on('showAddServerModal', function(){
 			console.log('what');
-			var parentElem = angular.element($document[0].querySelector('.modal-event'));
+			var parentElem = angular.element($document[0].querySelector('.modal-server'));
 			var modalInstance = $uibModal.open({
 					animation: $ctrl.animationsEnabled,
 					ariaLabelledBy: 'modal-title',
 					ariaDescribedBy: 'modal-event',
-					templateUrl: 'templates/panel/add/serverPanel.html',
+					templateUrl: 'templates/panel/AddServerPanel.html',
 					controller: 'AddServerModalInstanceCtrl',
 					controllerAs: '$ctrl',
-					size: 'lg',
+					size: 'sm',
 					appendTo: parentElem
 			});
 			modalInstance.result.then(function(selectedItem) {
 				$ctrl.selected = selectedItem;
 			}, function() {
+				global.busyOff();
 				$log.info('Modal was dismissed at: ' + new Date());
 			});
 		});
@@ -390,6 +410,95 @@
 			$ctrl.state.cssClass = 'red';
 		});
 	};
+	function AddVmModalCtrl ($uibModal, $scope, $log, $document, global){
+		var $ctrl = this;
+		$ctrl.animationsEnabled = true;
+		$ctrl.selectedItem;
+		$scope.$on('showAddVmModal', function(){
+			console.log('what');
+			var parentElem = angular.element($document[0].querySelector('.modal-vm'));
+			var modalInstance = $uibModal.open({
+					animation: $ctrl.animationsEnabled,
+					ariaLabelledBy: 'modal-title',
+					ariaDescribedBy: 'modal-event',
+					templateUrl: 'templates/panel/AddVmPanel.html',
+					controller: 'AddVmInstaceModalCtrl',
+					controllerAs: '$ctrl',
+					size: 'lg',
+					appendTo: parentElem
+			});
+			modalInstance.result.then(function(selectedItem) {
+				$ctrl.selected = selectedItem;
+			}, function() {
+				global.busyOff();
+				$log.info('Modal was dismissed at: ' + new Date());
+			});
+		});
+	}
+	function AddVmInstaceModalCtrl ($uibModalInstance, $scope, $timeout, global){
+		var $ctrl = this;
+		$ctrl.is = "it";
+		/*This will be loaded dinamically using global functions, will be using placeholder values rn*/
+		$ctrl.vm = ['Virtual Machine 1',
+						'Virtual Machine 2',
+						'Virtual Machine 3',
+						'Virtual Machine 4' ];
+		/* This will be used to store the virtual machines selected*/
+		$ctrl.slected_vm = [];
+		$ctrl.n = 1;
+		$ctrl.checkBoxSelected = false;
+		$ctrl.isDisabled = false;
+		$ctrl.selectTimeSlots = 0;
+		$ctrl.submitAddServerRequest = function() {
+			global.submitAddServerRequest($ctrl.event);
+			console.log($ctrl.event);
+		};
+		$ctrl.closeLogInDialog = function() {
+			console.log($ctrl.event);
+			$uibModalInstance.dismiss('close');
+		};
+	}
+	function AddWgModalCtrl ($uibModal, $scope, $log, $document, global){
+		var $ctrl = this;
+		$ctrl.animationsEnabled = true;
+		$ctrl.selectedItem;
+		$scope.$on('showAddWgModal', function(){
+			console.log('what');
+			var parentElem = angular.element($document[0].querySelector('.modal-wg'));
+			var modalInstance = $uibModal.open({
+					animation: $ctrl.animationsEnabled,
+					ariaLabelledBy: 'modal-title',
+					ariaDescribedBy: 'modal-event',
+					templateUrl: 'templates/panel/AddWgPanel.html',
+					controller: 'AddWgInstanceModalCtrl',
+					controllerAs: '$ctrl',
+					size: 'lg',
+					appendTo: parentElem
+			});
+			modalInstance.result.then(function(selectedItem) {
+				$ctrl.selected = selectedItem;
+			}, function() {
+				global.busyOff();
+				$log.info('Modal was dismissed at: ' + new Date());
+			});
+		});
+	}
+	function AddWgInstanceModalCtrl($uibModalInstance, $scope, $timeout, global){
+		var $ctrl = this;
+		$ctrl.n = 1;
+		$ctrl.checkBoxSelected = false;
+		$ctrl.isDisabled = false;
+		$ctrl.selectTimeSlots = 0;
+		$ctrl.submitAddServerRequest = function() {
+			global.submitAddServerRequest($ctrl.event);
+			console.log($ctrl.event);
+		};
+		$ctrl.closeLogInDialog = function() {
+			console.log($ctrl.event);
+			$uibModalInstance.dismiss('close');
+		};
+		
+	}
 	function blackModalInstanceConfig($mdThemingProvider){
 		$mdThemingProvider.theme('docs-dark', 'default')
       .primaryPalette('yellow')
@@ -397,23 +506,34 @@
 		
 	}
 	function serversController($route, $routeParams, $location, $scope, global) {
-		
+		$scope.toggleAddServerModal=function(){
+			global.showAddServerModal();
+		};
 	};
 	function vmController($route, $routeParams, $location, $scope, global) {
-		
+		$scope.toggleAddVmModal = function(){
+			global.showAddVmModal();
+		};
 	};
 	function wsgController($route, $routeParams, $location, $scope, global) {
-		
+		$scope.toggleAddWgModal = function(){
+			global.showAddWgModal();
+		};
 	};
 	function wsuController($route, $routeParams, $location, $scope, global) {
 		
 	};
-	function profilesController($route, $routeParams, $location) {
+	function profilesController($route, $routeParams, $location, $scope, global) {
 
 	};
 
 	app.controller('navCtrl', navCtrl);
+	app.controller('AddVmModalCtrl', AddVmModalCtrl);
+	app.controller('AddVmInstaceModalCtrl', AddVmInstaceModalCtrl);
+	app.controller('AddWgModalCtrl', AddWgModalCtrl);
+	app.controller('AddWgInstanceModalCtrl', AddWgInstanceModalCtrl);
 	app.controller('loginModalCtrl', loginModalCtrl);
+	app.controller('loginModalInstanceCtrl', loginModalInstanceCtrl);
 	app.controller('AddServerModalCtrl', AddServerModalCtrl);
 	app.controller('AddServerModalInstanceCtrl', AddServerModalInstanceCtrl);
 	app.controller('serversController', serversController);
