@@ -98,7 +98,10 @@ class WorkshopUnit():
         vmList = []
         for vm in self.__vms:
             newVMs = self.__hwmgr.cloneVM(vm, numUnits)
+            print(newVMs)
             vmList.append( list(newVMs) )
+        
+        print(vmList)
         
         for i in range(0, numUnits):
             uName = self.__unitName + str(i)
@@ -108,9 +111,11 @@ class WorkshopUnit():
             for j in range(0, len(vmList)):
                 vmSet.add( vmList[j][i])
             
+            print(vmSet)
+            
             unitConfig = {"unitName" : uName, "vms" : vmSet, "description" : self.__description, "referenceMaterial" : self.__referenceMaterial, "connectionString" : uPort, "sessionType" : self.__sessionType, "status" : self.__status} 
             newUnit = WorkshopUnit(unitConfig)
-            newUnits.union(unitConfig)
+            newUnits.add(newUnit)
             
         return newUnits
      

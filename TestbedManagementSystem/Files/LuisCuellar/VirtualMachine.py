@@ -61,7 +61,6 @@ class VirtualMachine:
         self.__snapshot['Snapshot'] = self.__iVM.current_snapshot
         
         newVMs = set()
-        print(self.__iVM.session_state)
         
         for i in range(1,numOfClones+1):
 

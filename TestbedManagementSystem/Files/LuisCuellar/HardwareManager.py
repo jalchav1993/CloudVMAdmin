@@ -24,6 +24,9 @@ class HardwareManager:
         
     def startVM(self, vmname):
         vm = self.__getVM(vmname)
+        if(vm is None):
+            print("None:" + vmname)
+            print( HardwareManager.vmSet)
         vm.startVM()
         
     def pauseVM(self, vmname):
@@ -83,4 +86,10 @@ class HardwareManager:
             
     def cloneVM(self, vmname, numOfClones):
         vm = self.__getVM(vmname)
-        return vm.clone(numOfClones)
+        newClones = vm.clone(numOfClones)
+        vmNamesSet = set()
+        for clone in newClones:
+            HardwareManager.vmSet.add(clone)
+            #print(clone.getVMName())
+            vmNamesSet.add( clone.getVMName())
+        return vmNamesSet

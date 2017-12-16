@@ -27,9 +27,13 @@ wsmgr.addWorkshopUnit(unit1)
 #wsmgr.power_downUnit("unit1")
 
 newUnits = wsmgr.cloneUnit("unit1", 2)
+print( len(newUnits) )
 
-ws1 = {"groupName": "group1", "associatedUnits": newUnits, "description": "fuck", "referenceMaterial": "fuck2.txt",
+ws1 = {"groupName": "group1", "associatedUnits": newUnits, "description": "fuck", "referenceMaterial": "fuck.txt",
        "sessionType": "persistent", "endDate": "12/15/2017", "status": "okayFam"}
 
 wsmgr.addWorkshopGroup(ws1)
+
+sleep(5)
+
 wsmgr.startGroup("group1")

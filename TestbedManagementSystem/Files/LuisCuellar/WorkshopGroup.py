@@ -66,4 +66,5 @@ class WorkshopGroup:
             
     def startAllUnits(self):
         for unit in self.__units:
+            print("Test")
             self.startUnit(unit)     
