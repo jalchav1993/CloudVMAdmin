@@ -82,6 +82,7 @@
 		obj.workshopUnitList = [];
 		obj.loginResponse = "";
 		obj.panelRef = "";
+		obj.cloneRequest = "";
 		obj.signUp = function(eventId){
 			$http({
 				url: "http://" + location.host + "/api/sql/insert/volunteer/",
@@ -159,10 +160,11 @@
 			$http({
 				url: "http://" + location.host + "/api/session/login/",
 				method: "POST",
-				data: {
+				headers: { 'Content-Type': 'application/json' },
+				data: JSON.stringify({
 					id: formUser,
 					pwd: formPwd
-				}
+				})
 			}).success(function(data, status, headers, config) {
 				console.log('got populate response '+data)
 				if(data ==='login-success'){
@@ -264,6 +266,11 @@
 			console.log("calling the modal")
 			$rootScope.$broadcast("isbusy");
 			$rootScope.$broadcast('showCloneModal');
+		}
+		obj.startCloneReq = function (req){
+			obj.cloneRequest = req;
+			console.log(req);
+			$rootScope.$broadcast('cloneRequestSet');
 		}
 		obj.busyOff = function(){
 			$rootScope.$broadcast('notbusy');
@@ -432,6 +439,7 @@
 		};
 		$ctrl.closeLogInDialog = function() {
 			$uibModalInstance.dismiss('close');
+			console.log("closing")
 		};
 	};
 	function AddServerModalCtrl($uibModal, $scope, $log, $document, global){
@@ -540,7 +548,7 @@
 			$uibModalInstance.dismiss('close');
 		};
 	}
-	function CloneVmModalCtrl($uibModal, $scope, $log, $document, global){
+	function CloneVmModalCtrl ($uibModal, $scope, $log, $document,global){
 		var $ctrl = this;
 		$ctrl.animationsEnabled = true;
 		$ctrl.selectedItem;
@@ -564,8 +572,14 @@
 			});
 		});
 	}
-	function CloneVmInstanceModalCtrl($uibModalInstance, $scope, $timeout, global){
+	function CloneVmInstanceModalCtrl($uibModalInstance, $scope, $timeout, $window, global){
 		var $ctrl = this;
+		$ctrl.data = new VirtualMachine();
+		$ctrl.data.vmname = global.cloneRequest;
+		$ctrl.closeLogInDialog = function() {
+			$uibModalInstance.dismiss('close');
+			console.log("test");
+		};
 	}
 	function AddWgModalCtrl ($uibModal, $scope, $log, $document, global){
 		var $ctrl = this;
@@ -603,7 +617,6 @@
 			console.log($ctrl.event);
 		};
 		$ctrl.closeLogInDialog = function() {
-			console.log($ctrl.event);
 			$uibModalInstance.dismiss('close');
 		};
 		
@@ -621,15 +634,23 @@
 	};
 	function vmController($route, $routeParams, $location, $scope, global) {
 		global.getAllVm();
+		$scope.conditions = [];
 		$scope.toggleAddVmModal = function(){
 			global.showAddVmModal();
 		};
 		$scope.toggleCloneVmModal = function () {
 			global.showToggleCloneVmModal();
 		};
+		$scope.startCloneReq = function(req){
+			global.startCloneReq(req);
+		}
 		$scope.$on('populate-vm', function(){
 			$scope.vmSList = [];
+			$scope.conditions =[];
 			$scope.vmSList = global.vmList;
+			for(i = 0; i <global.vmList.length; i++){
+				$scope.conditions[i] =  false;
+			}
 		});
 	};
 	function wsgController($route, $routeParams, $location, $scope, global) {
@@ -660,7 +681,7 @@
 	app.controller('AddVmModalCtrl', AddVmModalCtrl);
 	app.controller('AddVmInstaceModalCtrl', AddVmInstaceModalCtrl);
 	app.controller('CloneVmModalCtrl', CloneVmModalCtrl);
-	app.controller('CloneVmInstanceModalCtrl', CloneVmModalCtrl);
+	app.controller('CloneVmInstanceModalCtrl', CloneVmInstanceModalCtrl);
 	app.controller('AddWgModalCtrl', AddWgModalCtrl);
 	app.controller('AddWgInstanceModalCtrl', AddWgInstanceModalCtrl);
 	app.controller('loginModalCtrl', loginModalCtrl);

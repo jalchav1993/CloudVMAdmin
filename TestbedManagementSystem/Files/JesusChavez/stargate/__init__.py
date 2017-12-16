@@ -1,4 +1,4 @@
-from flask import Flask, request, send_from_directory, send_file
+from flask import Flask, request, send_from_directory, send_file, request
 from .users import users as user_blueprint
 from .hardware import hardware as hardware_blueprint
 from .workshop import workshop as workshop_blueprint
@@ -20,6 +20,11 @@ def get_menu_sidenav():
 @stargate.route('/api/menu/header')
 def get_menu_header():
   return send_from_directory('static', "header.json")
+@stargate.route('/api/session/login/', methods=['POST'])
+def login():
+  if request.json.get('id') == "alex" and request.json.get('pwd') == "123":
+    return "login-success"
+  return "login-denied"
 @stargate.route('/api/init')
 def get_init_req():
   return send_from_directory('static', "init.json")
