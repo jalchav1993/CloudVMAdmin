@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 from Clone import Clone
 from Server import Server
 from VirtualMachine import VirtualMachine
@@ -23,6 +24,18 @@ class HardwareManager:
     def startVM(self, vmname):
         vm = self.__getVM(vmname)
         vm.startVM()
+        
+    def pauseVM(self, vmname):
+        vm = self.__getVM(vmname)
+        vm.pauseVM()
+        
+    def resumeVM(self, vmname):
+        vm = self.__getVM(vmname)
+        vm.resumeVM()
+        
+    def power_downVM(self, vmname):
+        vm = self.__getVM(vmname)
+        vm.power_down()
     
     def getVRDP(self, vmname):
         vm = self.__getVM(vmname)
@@ -66,4 +79,3 @@ class HardwareManager:
             return False
         else:
             self.__serverSet.add(newServer)
-            return True

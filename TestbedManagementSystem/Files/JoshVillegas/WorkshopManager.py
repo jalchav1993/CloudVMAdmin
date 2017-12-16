@@ -9,12 +9,6 @@ class WorkshopManager:
         self.__groupSet = set() #not sure if used yet
         self.__unitSet = set() #not sure if used yet
         
-    def __getWorkshop(self, workshopName):
-        for workshop in self.__workshopSet:
-            if workshopName == workshop.getName():
-                return workshop
-            return None
-        
     def __getGroup(self, groupName):
         for group in self.__groupSet:
             if groupName == WorkshopGroup.getName():
@@ -29,18 +23,26 @@ class WorkshopManager:
         
     
     def getReferenceMaterial(self, workshopName):
-         workshop = self.__getWorkshop(workshopName)
-         return (workshop.getReferenceMaterial())
+        if(workshopName in self.__groupSet):
+            workshop = self.__getGroup(workshopName)
+        elif(workshopName in self.__unitSet):
+            workshop = self.__getUnit(workshopName)
+        else:
+            return None
+        return (workshop.getReferenceMaterial())
      
     def getGroupStatus(self, workshopName):
-        workshop = self.__getWorkshop(workshopName)
+        group = self.__getGroup(workshopName)
         return(workshopGroup.getWorkshopStatus)
         
     def getAvailableWorkshops(self):
+        availableUnits = set()
+        for unit in self.__getUnit():
+            if(unit.isAvailable()):
+                availableUnits.add(unit)
+            
+        return availableUnits
     
-    def getUnitConnectionString(self, unitName):
-        unit = self.__getUnit(unitName)
-        return (unit.getConnectionString())
     
     def addWorkshopUnit(self, configurations):
         newUnit = workshopUnit(configurations)
@@ -57,50 +59,10 @@ class WorkshopManager:
         else:
             self.__groupSet.add(newGroup)
             return True
-        
-    def addWorkshop(self, configurations):
-        newWorkshop = Workshop(configurations)
-        if(newWorkshop in self.__workshopSet):
+
+    def cloneUnit(self, unitName, numOfClones):
+        unit = self.__getUnit(unitName)
+        if(unit is None):
             return False
-        else:
-            self.__workshopSet.add(newWorkshop)
-            return True
-    
-    def createConfig(self):
-        config = {}
-        
-        unitName = getFromGui
-        config.update(unitName=unitName)
-        
-        vms = GetFromGui
-        config.update(vms=vms)
-        
-        description = getFromGui
-        config.update(description=description)
-        
-        referenceMaterial = GetFromGui
-        config.update(referenceMaterial=referenceMaterial)
-        
-        connectionString = GetFromGui
-        config.update(connectionString=connectionString)
-        
-        sessionType = GetFromGui
-        config.update(sessionType=sessionType)
-        
-        endDate = GetFromGui
-        config.update(endDate=endDate)
-    
-        return config
-        
-        
-    def createUnit(self):
-        configurations = createConfig()
-        newUnit = WorkshopUnit(configurations)
-        unitSet.add(newUnit)
-        
-    def createGroup(self):
-        
-        newGroup = WorkshopGroup(configurations)
-        groupSet.add(newGroup)
-        
-    
+        newUnits = unit.cloneUnits(numOfClones)
+        return(newUnits)
