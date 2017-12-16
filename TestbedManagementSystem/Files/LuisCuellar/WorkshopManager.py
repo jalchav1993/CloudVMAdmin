@@ -67,19 +67,19 @@ class WorkshopManager:
             return False
         group.startAllUnits()
 		
-	def power_downGroup(self, groupName):
+    def power_downGroup(self, groupName):
         group = self.__getGroup(groupName)
         if(group is None):
             return False
         group.power_downAllUnits()
 		
-	def pauseGroup(self, groupName):
+    def pauseGroup(self, groupName):
         group = self.__getGroup(groupName)
         if(group is None):
             return False
         group.pauseAllUnits()
 		
-	def resumeGroup(self, groupName):
+    def resumeGroup(self, groupName):
         group = self.__getGroup(groupName)
         if(group is None):
             return False
