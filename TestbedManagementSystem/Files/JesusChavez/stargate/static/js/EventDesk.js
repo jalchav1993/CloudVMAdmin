@@ -41,6 +41,14 @@
 		this.eventPreference='';
 		this.userClass='';
 	}
+	var WorkshopGroup = function(){
+		this.worgkshop_group_name = ''
+	  this.numbreps_workshop = ''
+	  this.host_ip = ''
+	  this.status_s = ''
+	  this.workshop_description = ''
+	  this.workshop_unit_list = []
+	}
 	/* Author: Jesus Chavez
 	 * Global factory, handles http requests to rest
 	 */
@@ -54,6 +62,7 @@
 		obj.state = [];
 		obj.header = [];
 		obj.report = [];
+		obj.workshopGroupList = [];
 		obj.loginResponse = "";
 		obj.panelRef = "";
 		obj.signUp = function(eventId){
@@ -163,6 +172,23 @@
 				console.log(response);
 			});
 		}
+		obj.getAllWorkshopGroups =function (){
+			obj.workshopGroupList = [];
+			$http({
+				url: "http://" + location.host + "/workshop/getAll/",
+				method: "GET"
+			}).success(function(data, status, headers, config) {
+				for (i = 0; i < data.length; i++) {
+					tmp = new WorkshopGroup();
+					angular.copy(data[i], tmp);
+					obj.workshopGroupList.push(tmp);
+					$rootScope.$broadcast("populate-wg");
+				};
+			}).error(function(data, status, headers, config) {
+				console.log('Error');
+				console.log(response);
+			});
+		}
 		obj.showAddVmModal = function(){
 			console.log("calling the modal")
 			$rootScope.$broadcast("isbusy");
@@ -183,6 +209,11 @@
 			$rootScope.$broadcast("isbusy");
 			$rootScope.$broadcast('showAddWgModal');
 		};
+		obj.showToggleCloneVmModal = function(){
+			console.log("calling the modal")
+			$rootScope.$broadcast("isbusy");
+			$rootScope.$broadcast('showCloneModal');
+		}
 		obj.busyOff = function(){
 			$rootScope.$broadcast('notbusy');
 		}
@@ -255,7 +286,7 @@
 				global.showLoginModal();
 			} else if (a == 'signout') {
 				global.signOut();
-			}else if (a === 'server'){
+			}else if (a == 'server'){
 				//global.getUsers();
 			} else if (a === 'vm'){
 				//global.addEvent();
@@ -458,6 +489,33 @@
 			$uibModalInstance.dismiss('close');
 		};
 	}
+	function CloneVmModalCtrl($uibModal, $scope, $log, $document, global){
+		var $ctrl = this;
+		$ctrl.animationsEnabled = true;
+		$ctrl.selectedItem;
+		$scope.$on('showCloneModal', function(){
+			var parentElem = angular.element($document[0].querySelector('.modal-clonevm'));
+			var modalInstance = $uibModal.open({
+					animation: $ctrl.animationsEnabled,
+					ariaLabelledBy: 'modal-title',
+					ariaDescribedBy: 'modal-event',
+					templateUrl: 'templates/panel/CloneVmPanel.html',
+					controller: 'CloneVmInstanceModalCtrl',
+					controllerAs: '$ctrl',
+					size: 'lg',
+					appendTo: parentElem
+			});
+			modalInstance.result.then(function(selectedItem) {
+				$ctrl.selected = selectedItem;
+			}, function() {
+				global.busyOff();
+				$log.info('Modal was dismissed at: ' + new Date());
+			});
+		});
+	}
+	function CloneVmInstanceModalCtrl($uibModalInstance, $scope, $timeout, global){
+		var $ctrl = this;
+	}
 	function AddWgModalCtrl ($uibModal, $scope, $log, $document, global){
 		var $ctrl = this;
 		$ctrl.animationsEnabled = true;
@@ -514,11 +572,19 @@
 		$scope.toggleAddVmModal = function(){
 			global.showAddVmModal();
 		};
+		$scope.toggleCloneVmModal = function () {
+			global.showToggleCloneVmModal();
+		};
 	};
 	function wsgController($route, $routeParams, $location, $scope, global) {
+		global.getAllWorkshopGroups();
 		$scope.toggleAddWgModal = function(){
 			global.showAddWgModal();
 		};
+		$scope.$on('populate-wg', function(){
+			$scope.workshop_gp = [];
+			$scope.workshop_gp = global.workshopGroupList;
+		});
 	};
 	function wsuController($route, $routeParams, $location, $scope, global) {
 		
@@ -530,6 +596,8 @@
 	app.controller('navCtrl', navCtrl);
 	app.controller('AddVmModalCtrl', AddVmModalCtrl);
 	app.controller('AddVmInstaceModalCtrl', AddVmInstaceModalCtrl);
+	app.controller('CloneVmModalCtrl', CloneVmModalCtrl);
+	app.controller('CloneVmInstanceModalCtrl', CloneVmModalCtrl);
 	app.controller('AddWgModalCtrl', AddWgModalCtrl);
 	app.controller('AddWgInstanceModalCtrl', AddWgInstanceModalCtrl);
 	app.controller('loginModalCtrl', loginModalCtrl);
