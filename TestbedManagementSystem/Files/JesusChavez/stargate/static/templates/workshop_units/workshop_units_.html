@@ -44,13 +44,15 @@
 		
 		<md-content flex layout-padding>
 			<uib-accordion close-others="oneAtATime">
-				<div uib-accordion-group class="panel-default" ng-repeat = "wu in workshop_unit" >
+				<div uib-accordion-group class="panel-default" >
 					<uib-accordion-heading ng-click = "">
 						<md-list-item>
-							<p> {{wu.unitName}}</p>
+							<p> Workshop Unit A</p>
 							<div flex="33"style = "height:100%; and overflow:auto;"></div>
-							<p>{{wu.sessionType}}</p>
-						  <i class=" material-icons"><span class = "white-text">{{wu.status}}</span></i>
+							<p> 2 </p>
+							<p>172.123.213.2</p>
+							<p>Active</p>
+						  <i class=" material-icons"><span class = "white-text">brightness_3</span></i>
 						</md-list-item>
 					</uib-accordion-heading>
 					<secion layout = "row">
@@ -63,15 +65,15 @@
 								</tr>
 					      <tr>
 									<td>
-										{{wu.description}}
+										Description of Workshop Group A 
 									</td>
 								</tr>
 					      <tr>
 									<th>Virtual Machines</th>
 								</tr>
-					      <tr ng-repeat = "vm in wu.vms">
+					      <tr>
 									<td>
-										{{vm}}
+										VM1
 									</td>
 									<td>
 										1243

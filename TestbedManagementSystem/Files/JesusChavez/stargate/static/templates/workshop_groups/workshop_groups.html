@@ -43,14 +43,15 @@
 		</md-toolbar>
 		<md-content flex layout-padding>
 			<uib-accordion close-others="oneAtATime">
-				<div uib-accordion-group class="panel-default" >
+				<div uib-accordion-group class="panel-default" ng-repeat = "wg in workshop_gp">
 					<uib-accordion-heading ng-click = "">
 						<md-list-item>
-							<p> Workshop Group A</p>
+							<p> {{wg.worgkshop_group_name}}</p>
 							<div flex="33"style = "height:100%; and overflow:auto;"></div>
-							<p> 2 </p>
-							<p>172.123.213.2</p>
-						  <i class=" material-icons"><span class = "white-text">brightness_3</span></i>
+							<p> {{wg.numbreps_workshop}}</p>
+							<p>{{wg.host_ip}}</p>
+						  <i class=" material-icons">
+								<span class = "white-text">{{wg.status_s}}</span></i>
 						</md-list-item>
 					</uib-accordion-heading>
 					<secion layout = "row">
@@ -61,20 +62,15 @@
 								</tr>
 					      <tr>
 									<td>
-										Description of Workshop Group A 
+										{{wg.workshop_description}}
 									</td>
 								</tr>
 					      <tr>
 									<th>Workshop Units</th>
 								</tr>
-					      <tr>
+					      <tr ng-repeat = "wu in wg.workshop_unit_list">
 									<td>
-										Workshop Unit 1
-									</td>
-								</tr>
-					      <tr>
-									<td>
-										Workshop Unit 1
+										{{wu}}
 									</td>
 								</tr>
 								<tr>

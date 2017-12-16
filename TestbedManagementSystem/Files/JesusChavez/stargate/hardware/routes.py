@@ -1,8 +1,17 @@
 from . import hardware
+import json
 #import manager
-@hardware.route("/hardware/get")
-def get():
-    return HardwareManager.getVM();
+@hardware.route("/hardware/getVms/")
+def getVms():
+    c = [
+      {
+        "vmname":"some name", 
+        "vrdp": "jndndn", 
+        "networkAdapter": "some adapter",
+        "host":"187.234.132.1"
+      }
+    ];
+    return json.dumps(c);
 
 @hardware.route("/hardware/get/VRDP/<name>")
 def getVRDP(name):

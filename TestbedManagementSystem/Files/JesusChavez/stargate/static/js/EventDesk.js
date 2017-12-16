@@ -41,6 +41,28 @@
 		this.eventPreference='';
 		this.userClass='';
 	}
+	var WorkshopGroup = function(){
+		this.worgkshop_group_name = ''
+	  this.numbreps_workshop = ''
+	  this.host_ip = ''
+	  this.status_s = ''
+	  this.workshop_description = ''
+	  this.workshop_unit_list = []
+	}
+	var WorkshopUnit = function () {
+		this.unitName;
+		this.vms;
+		this.referenceMaterial;
+		this.connectionString;
+		this.sessionType;
+		this.status;
+	}
+	var VirtualMachine = function () {
+		this.vmname;
+		this.vrdp;
+		this.networkAdapter;
+		this.host;
+	}
 	/* Author: Jesus Chavez
 	 * Global factory, handles http requests to rest
 	 */
@@ -51,9 +73,13 @@
 		obj.userItemList = [];
 		obj.eventItemList = [];
 		obj.requestItemList = [];
+		obj.workshopUnitList = [];
+		obj.vmList = [];
 		obj.state = [];
 		obj.header = [];
 		obj.report = [];
+		obj.workshopGroupList = [];
+		obj.workshopUnitList = [];
 		obj.loginResponse = "";
 		obj.panelRef = "";
 		obj.signUp = function(eventId){
@@ -163,6 +189,57 @@
 				console.log(response);
 			});
 		}
+		obj.getAllWorkshopGroups =function (){
+			obj.workshopGroupList = [];
+			$http({
+				url: "http://" + location.host + "/workshop/getAllWg/",
+				method: "GET"
+			}).success(function(data, status, headers, config) {
+				for (i = 0; i < data.length; i++) {
+					tmp = new WorkshopGroup();
+					angular.copy(data[i], tmp);
+					obj.workshopGroupList.push(tmp);
+					$rootScope.$broadcast("populate-wg");
+				};
+			}).error(function(data, status, headers, config) {
+				console.log('Error');
+				console.log(response);
+			});
+		}
+		obj.getAllWorkshopUnits = function () {
+			obj.workshopUnitList = [];
+			$http({
+				url: "http://" + location.host + "/workshop/getAllWu/",
+				method: "GET"
+			}).success(function(data, status, headers, config) {
+				for (i = 0; i < data.length; i++) {
+					tmp = new WorkshopUnit();
+					angular.copy(data[i], tmp);
+					obj.workshopUnitList.push(tmp);
+					$rootScope.$broadcast("populate-wu");
+				};
+			}).error(function(data, status, headers, config) {
+				console.log('Error');
+				console.log(response);
+			});
+		}
+		obj.getAllVm = function (){
+			obj.vmList = [];
+			$http({
+				url: "http://" + location.host + "/hardware/getVms/",
+				method: "GET"
+			}).success(function(data, status, headers, config) {
+				for (i = 0; i < data.length; i++) {
+					tmp = new VirtualMachine();
+					angular.copy(data[i], tmp);
+					obj.vmList.push(tmp);
+					$rootScope.$broadcast("populate-vm");
+				};
+			}).error(function(data, status, headers, config) {
+				console.log('Error');
+				console.log(response);
+			});
+		}
 		obj.showAddVmModal = function(){
 			console.log("calling the modal")
 			$rootScope.$broadcast("isbusy");
@@ -183,6 +260,11 @@
 			$rootScope.$broadcast("isbusy");
 			$rootScope.$broadcast('showAddWgModal');
 		};
+		obj.showToggleCloneVmModal = function(){
+			console.log("calling the modal")
+			$rootScope.$broadcast("isbusy");
+			$rootScope.$broadcast('showCloneModal');
+		}
 		obj.busyOff = function(){
 			$rootScope.$broadcast('notbusy');
 		}
@@ -255,7 +337,7 @@
 				global.showLoginModal();
 			} else if (a == 'signout') {
 				global.signOut();
-			}else if (a === 'server'){
+			}else if (a == 'server'){
 				//global.getUsers();
 			} else if (a === 'vm'){
 				//global.addEvent();
@@ -458,6 +540,33 @@
 			$uibModalInstance.dismiss('close');
 		};
 	}
+	function CloneVmModalCtrl($uibModal, $scope, $log, $document, global){
+		var $ctrl = this;
+		$ctrl.animationsEnabled = true;
+		$ctrl.selectedItem;
+		$scope.$on('showCloneModal', function(){
+			var parentElem = angular.element($document[0].querySelector('.modal-clonevm'));
+			var modalInstance = $uibModal.open({
+					animation: $ctrl.animationsEnabled,
+					ariaLabelledBy: 'modal-title',
+					ariaDescribedBy: 'modal-event',
+					templateUrl: 'templates/panel/CloneVmPanel.html',
+					controller: 'CloneVmInstanceModalCtrl',
+					controllerAs: '$ctrl',
+					size: 'lg',
+					appendTo: parentElem
+			});
+			modalInstance.result.then(function(selectedItem) {
+				$ctrl.selected = selectedItem;
+			}, function() {
+				global.busyOff();
+				$log.info('Modal was dismissed at: ' + new Date());
+			});
+		});
+	}
+	function CloneVmInstanceModalCtrl($uibModalInstance, $scope, $timeout, global){
+		var $ctrl = this;
+	}
 	function AddWgModalCtrl ($uibModal, $scope, $log, $document, global){
 		var $ctrl = this;
 		$ctrl.animationsEnabled = true;
@@ -511,17 +620,37 @@
 		};
 	};
 	function vmController($route, $routeParams, $location, $scope, global) {
+		global.getAllVm();
 		$scope.toggleAddVmModal = function(){
 			global.showAddVmModal();
 		};
+		$scope.toggleCloneVmModal = function () {
+			global.showToggleCloneVmModal();
+		};
+		$scope.$on('populate-vm', function(){
+			$scope.vmSList = [];
+			$scope.vmSList = global.vmList;
+		});
 	};
 	function wsgController($route, $routeParams, $location, $scope, global) {
+		global.getAllWorkshopGroups();
 		$scope.toggleAddWgModal = function(){
 			global.showAddWgModal();
 		};
+		$scope.$on('populate-wg', function(){
+			$scope.workshop_gp = [];
+			$scope.workshop_gp = global.workshopGroupList;
+		});
 	};
 	function wsuController($route, $routeParams, $location, $scope, global) {
-		
+		global.getAllWorkshopUnits();
+		$scope.toggleAddWuModal = function(){
+			global.showAddWuModal();
+		};
+		$scope.$on('populate-wu', function(){
+			$scope.workshop_unit = [];
+			$scope.workshop_unit = global.workshopUnitList;
+		});
 	};
 	function profilesController($route, $routeParams, $location, $scope, global) {
 
@@ -530,6 +659,8 @@
 	app.controller('navCtrl', navCtrl);
 	app.controller('AddVmModalCtrl', AddVmModalCtrl);
 	app.controller('AddVmInstaceModalCtrl', AddVmInstaceModalCtrl);
+	app.controller('CloneVmModalCtrl', CloneVmModalCtrl);
+	app.controller('CloneVmInstanceModalCtrl', CloneVmModalCtrl);
 	app.controller('AddWgModalCtrl', AddWgModalCtrl);
 	app.controller('AddWgInstanceModalCtrl', AddWgInstanceModalCtrl);
 	app.controller('loginModalCtrl', loginModalCtrl);
