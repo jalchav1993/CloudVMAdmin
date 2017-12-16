@@ -8,8 +8,14 @@ class WorkshopUnit:
         self.__connectionString = configuration['connectionString']
         self.__sessionType = configurations['sessionType']
         self.__status = configurations['status']
-        self.__hwmgr = HardwareManager.instance()
+        self.__hwmgr = HardwareManager()
         #self.__createUnitRecord()
+        
+    def __eq__(self, other):
+        return self.__unitName == other.getUnitName()
+    
+    def __hash__(self):
+        return hash(self.__unitName)    
         
     def getVmList(self):
         return self.__vms

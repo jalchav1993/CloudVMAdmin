@@ -4,28 +4,29 @@ from WorkshopUnit import WorkshopUnit
 from lib2to3.pgen2.tokenize import group
 
 class WorkshopManager:
+    __groupSet = set()
+    __unitSet = set()
+    
     def __init__(self):
         print("Workshop Manager created")
-        self.__groupSet = set() #not sure if used yet
-        self.__unitSet = set() #not sure if used yet
         
     def __getGroup(self, groupName):
-        for group in self.__groupSet:
+        for group in __groupSet:
             if groupName == WorkshopGroup.getName():
                 return WorkshopGroup
             return None
         
     def __getUnit(self, unitName):
-        for unit in self.__unitSet:
+        for unit in __unitSet:
             if unitName == WorkshopUnit.getName():
                 return WorkshopUnit
             return None
         
     
     def getReferenceMaterial(self, workshopName):
-        if(workshopName in self.__groupSet):
+        if(workshopName in __groupSet):
             workshop = self.__getGroup(workshopName)
-        elif(workshopName in self.__unitSet):
+        elif(workshopName in __unitSet):
             workshop = self.__getUnit(workshopName)
         else:
             return None
@@ -46,18 +47,18 @@ class WorkshopManager:
     
     def addWorkshopUnit(self, configurations):
         newUnit = workshopUnit(configurations)
-        if(newUnit in self.__unitSet):  #unit already exists
+        if(newUnit in __unitSet):  #unit already exists
             return False
         else:
-            self.__unitSet.add(newUnit)
+            __unitSet.add(newUnit)
             return True
         
     def addWorkshopGroup(self, configurations):
         newGroup = WorkshopGroup(configurations)
-        if(newGroup in self.__groupSet):
+        if(newGroup in __groupSet):
             return False
         else:
-            self.__groupSet.add(newGroup)
+            __groupSet.add(newGroup)
             return True
 
     def cloneUnit(self, unitName, numOfClones):

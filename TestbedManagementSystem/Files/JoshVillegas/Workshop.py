@@ -17,9 +17,11 @@ class Workshop:
         return self.__status
     
     def getVmStatus(self):
+        print("vmStatus")
         #status of all associated vms?
         
     def getServerStatus(self):
+        print("Status")
         #status of host server??
         
     def __createWorkshopRecord(self):

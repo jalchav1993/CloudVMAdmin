@@ -1,25 +1,26 @@
-<<<<<<< HEAD
 from Clone import Clone
 from Server import Server
 from VirtualMachine import VirtualMachine
 
 class HardwareManager:
+    vmSet = set()
+    serverSet = set()
+    
     def __init__(self):
-        print("Hardware Manager Created")
-        self.__vmSet = set()
-        self.__serverSet = set()
+        print("HardwareManager Created")
         
     def __getVM(self, vmname):
-        for vm in self.__vmSet: 
-            if vmname == vm.getName(): 
+        for vm in HardwareManager.vmSet: 
+            if vmname == vm.getVMName(): 
                 return vm
-            return None 
+            print(vmname + ", ", vm.getVMName())
+        return None 
         
     def __getServer(self, serverIP):
-        for server in self.__serverSet:
+        for server in HardwareManager.serverSet:
             if serverIP == server.getIP():
                 return server
-            return None
+        return None
         
     def startVM(self, vmname):
         vm = self.__getVM(vmname)
@@ -66,16 +67,20 @@ class HardwareManager:
     # Configurations is a dictionary with keys: vmname, vrdp, networkAdapter, host
     def addVirtualMachine(self, configurations):
         newVM = VirtualMachine(configurations)
-        if(newVM in self.__vmSet):
+        if(newVM in HardwareManager.vmSet):
             return False
         else:
-            self.__vmList.add(newVM)
+            HardwareManager.vmSet.add(newVM)
             return True
         
     # Configurations is a dictionary with keys: ipAddress, username, password
     def addServer(self, configurations):
         newServer = Server(configurations)
-        if(newServer in self.__serverSet):
+        if(newServer in HardwareManager.serverSet):
             return False
         else:
-            self.__serverSet.add(newServer)
+            HardwareManager.serverSet.add(newServer)
+            
+    def cloneVM(self, vmname, numOfClones):
+        vm = self.__getVM(vmname)
+        return vm.clone(numOfClones)

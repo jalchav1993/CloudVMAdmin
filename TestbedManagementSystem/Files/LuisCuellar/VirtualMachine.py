@@ -16,6 +16,7 @@ class VirtualMachine:
         self.__snapshot = {"Snapshot": None, "name": ""}
         
         self.__setNetworkAdapter()
+        self.takeSnapshot()
         
         print("Virtual Machine: "+self.__vmname+" created")        
         #self.__createVMRecord()
@@ -41,7 +42,7 @@ class VirtualMachine:
         if(self.__iVM.session_state != 2):
             self.__iVM.lock_machine(self.__session, virtualbox.library.LockType.write)
         progress = self.__session.machine.take_snapshot(name, "desc", False)
-        self.__snapshot['Snapshot'] = self.__session.machine.current_snapshot
+        self.__snapshot['Snapshot'] = self.__iVM.current_snapshot
         self.__snapshot['name'] = name
         
     def clone(self,numOfClones):
@@ -51,10 +52,16 @@ class VirtualMachine:
         if(wasRunning): #is running
             self.pauseVM()
             sleep(5)
+            
         
         if(self.__snapshot['Snapshot'] is None):
+            print("Taking Snapshot")
             self.takeSnapshot()
+        
+        self.__snapshot['Snapshot'] = self.__iVM.current_snapshot
+        
         newVMs = set()
+        print(self.__iVM.session_state)
         
         for i in range(1,numOfClones+1):
 
@@ -63,13 +70,7 @@ class VirtualMachine:
             newPort = self.__vrdp['port'] + i
             newVRDP = {'ip': self.__vrdp['ip'], 'port': newPort}
             newConfig = {'vmname': newName, 'vrdp': newVRDP, 'networkAdapter': self.__networkAdapter, 'host': self.__host}
-            iVM = self.__iVM.clone(snapshot_name_or_id = self.__snapshot['Snapshot'], name = newName)
-            
-            session = iVM.create_session()
-            server = session.machine.vrde_server
-            server.set_vrde_property("TCP/Ports", str(newPort))
-            session.machine.save_settings()
-            session.unlock_machine()
+            newiVM = self.__iVM.clone(snapshot_name_or_id = self.__snapshot['Snapshot'], name = newName)
             
             newVM = VirtualMachine(newConfig)
             newVMs.add(newVM)
@@ -81,8 +82,12 @@ class VirtualMachine:
         
         return newVMs
         
+        
     def startVM(self):    
-        self.__progress = self.__iVM.launch_vm_process(None, 'headless', '')
+        if(self.__iVM.session_state == 2):
+            #self.__session = self.__iVM.create_session()
+            self.__session.unlock_machine()
+        progress = self.__iVM.launch_vm_process(None, 'headless', '')
         
     def pauseVM(self):
         self.__session = self.__iVM.create_session()
