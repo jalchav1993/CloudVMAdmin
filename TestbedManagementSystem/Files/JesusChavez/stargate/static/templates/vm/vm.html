@@ -33,12 +33,11 @@
 		  </div>
 		</md-toolbar>
 		
-		<md-content flex layout-padding>
+		<md-content flex layout-padding ng-repeat = "vm in vmSList">
 			<md-list-item>
-				<p> Workshop Group A</p>
+				<p> {{vm.vmname}}</p>
 				<div flex="33"style = "height:100%; and overflow:auto;"></div>
-				<p> 2 </p>
-				<p>172.123.213.2</p>
+				<p>{{vm.host}}</p>
 			  <md-checkbox class="md-secondary"></md-checkbox>
 			</md-list-item>
 		</md-content>

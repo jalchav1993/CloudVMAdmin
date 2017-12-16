@@ -49,6 +49,20 @@
 	  this.workshop_description = ''
 	  this.workshop_unit_list = []
 	}
+	var WorkshopUnit = function () {
+		this.unitName;
+		this.vms;
+		this.referenceMaterial;
+		this.connectionString;
+		this.sessionType;
+		this.status;
+	}
+	var VirtualMachine = function () {
+		this.vmname;
+		this.vrdp;
+		this.networkAdapter;
+		this.host;
+	}
 	/* Author: Jesus Chavez
 	 * Global factory, handles http requests to rest
 	 */
@@ -59,10 +73,13 @@
 		obj.userItemList = [];
 		obj.eventItemList = [];
 		obj.requestItemList = [];
+		obj.workshopUnitList = [];
+		obj.vmList = [];
 		obj.state = [];
 		obj.header = [];
 		obj.report = [];
 		obj.workshopGroupList = [];
+		obj.workshopUnitList = [];
 		obj.loginResponse = "";
 		obj.panelRef = "";
 		obj.signUp = function(eventId){
@@ -175,7 +192,7 @@
 		obj.getAllWorkshopGroups =function (){
 			obj.workshopGroupList = [];
 			$http({
-				url: "http://" + location.host + "/workshop/getAll/",
+				url: "http://" + location.host + "/workshop/getAllWg/",
 				method: "GET"
 			}).success(function(data, status, headers, config) {
 				for (i = 0; i < data.length; i++) {
@@ -183,6 +200,40 @@
 					angular.copy(data[i], tmp);
 					obj.workshopGroupList.push(tmp);
 					$rootScope.$broadcast("populate-wg");
+				};
+			}).error(function(data, status, headers, config) {
+				console.log('Error');
+				console.log(response);
+			});
+		}
+		obj.getAllWorkshopUnits = function () {
+			obj.workshopUnitList = [];
+			$http({
+				url: "http://" + location.host + "/workshop/getAllWu/",
+				method: "GET"
+			}).success(function(data, status, headers, config) {
+				for (i = 0; i < data.length; i++) {
+					tmp = new WorkshopUnit();
+					angular.copy(data[i], tmp);
+					obj.workshopUnitList.push(tmp);
+					$rootScope.$broadcast("populate-wu");
+				};
+			}).error(function(data, status, headers, config) {
+				console.log('Error');
+				console.log(response);
+			});
+		}
+		obj.getAllVm = function (){
+			obj.vmList = [];
+			$http({
+				url: "http://" + location.host + "/hardware/getVms/",
+				method: "GET"
+			}).success(function(data, status, headers, config) {
+				for (i = 0; i < data.length; i++) {
+					tmp = new VirtualMachine();
+					angular.copy(data[i], tmp);
+					obj.vmList.push(tmp);
+					$rootScope.$broadcast("populate-vm");
 				};
 			}).error(function(data, status, headers, config) {
 				console.log('Error');
@@ -569,12 +620,17 @@
 		};
 	};
 	function vmController($route, $routeParams, $location, $scope, global) {
+		global.getAllVm();
 		$scope.toggleAddVmModal = function(){
 			global.showAddVmModal();
 		};
 		$scope.toggleCloneVmModal = function () {
 			global.showToggleCloneVmModal();
 		};
+		$scope.$on('populate-vm', function(){
+			$scope.vmSList = [];
+			$scope.vmSList = global.vmList;
+		});
 	};
 	function wsgController($route, $routeParams, $location, $scope, global) {
 		global.getAllWorkshopGroups();
@@ -587,7 +643,14 @@
 		});
 	};
 	function wsuController($route, $routeParams, $location, $scope, global) {
-		
+		global.getAllWorkshopUnits();
+		$scope.toggleAddWuModal = function(){
+			global.showAddWuModal();
+		};
+		$scope.$on('populate-wu', function(){
+			$scope.workshop_unit = [];
+			$scope.workshop_unit = global.workshopUnitList;
+		});
 	};
 	function profilesController($route, $routeParams, $location, $scope, global) {
 
